@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restplus import Resource, Api, fields
 from os import environ as env
 import datetime
@@ -10,12 +10,14 @@ from sqlalchemy import exists, and_
 import pytz
 import requests
 import json
+from multiprocessing import Value
 
 TZ = pytz.timezone('Australia/Sydney')
 NOW = datetime.datetime.now(tz=TZ).time()
 TODAY = datetime.datetime.now(tz=TZ).date()
 PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
+counter = Value('i', 0)
 
 # define the initial context of app
 app = Flask(__name__)
@@ -24,7 +26,10 @@ api = Api(app,
           title="Service to predict the overall rating of a player based of values",  # Documentation Title
           description="An application which receives the values and predicts the closest player ")  # Document Description
 
-#SAMPLE GET
+
+
+
+
 @api.route('/sample')
 class User(Resource):
     @api.response(404, 'Not Found')
@@ -47,7 +52,13 @@ class Payment(Resource):
     def post(self):
         values = json.loads(request.get_json(force=True))
         print(values)
+        self.index()
         return {"Message" : "Value Printed"}, 200
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter.value += 1
+        return jsonify(count=counter.value)
 
 
 @api.route('/test')
@@ -64,6 +75,16 @@ class Test(Resource):
 
         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
         return r.text
+
+
+@api.route('/test_counter')
+class Test(Resource):
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.response(200, 'OK')
+    @api.doc(description="Test the api using json")
+    def get(self):
+        return jsonify(count=counter.value)
 
 
 if __name__ == '__main__':
