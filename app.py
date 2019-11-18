@@ -7,6 +7,7 @@ import pytz
 import json
 from functools import wraps
 import jwt
+import pickle
 from os import environ as env
 import datetime
 from sqlalchemy import exists, and_
@@ -16,14 +17,12 @@ import json
 from multiprocessing import Value
 from flask_restplus import abort, reqparse
 
-
 TZ = pytz.timezone('Australia/Sydney')
 NOW = datetime.datetime.now(tz=TZ).time()
 TODAY = datetime.datetime.now(tz=TZ).date()
 PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
 counter = Value('i', 0)
-
 
 
 class AuthenticationToken:
@@ -54,12 +53,13 @@ api = Api(app, authorizations={
         'type': 'apiKey',
         'in': 'header',
         'name': 'AUTH-TOKEN',
-            }
-        },
-            security='API-KEY',
+    }
+},
+          security='API-KEY',
           default="FIFA Database",  # Default namespace
           title="Service to predict the overall rating of a player based of values",  # Documentation Title
           description="An application which receives the values and predicts the closest player ")  # Document Description
+
 
 def requires_auth(f):
     @wraps(f)
@@ -78,15 +78,12 @@ def requires_auth(f):
 
     return decorated
 
-credential_model = api.model('credential', {
-    'username': fields.String,
-    'password': fields.String
-})
 
 credential_model = api.model('credential', {
     'username': fields.String,
     'password': fields.String
 })
+
 credential_parser = reqparse.RequestParser()
 credential_parser.add_argument('username', type=str)
 credential_parser.add_argument('password', type=str)
@@ -104,9 +101,9 @@ class Token(Resource):
         password = args.get('password')
 
         if username == 'admin' and password == 'admin':
-#             print("Entered here")
+            #             print("Entered here")
             token_to_be_sent = auth.generate_token(username)
-#             print(token_to_be_sent)
+            #             print(token_to_be_sent)
             return {"token": str(token_to_be_sent, 'utf-8')}
 
         return {"message": "authorization has been refused for those credentials."}, 401
@@ -124,21 +121,30 @@ class User(Resource):
         return
 
 
-
-
 # Sample POST
-@api.route('/post_sample')
+@api.route('/overall')
 class Payment(Resource):
-    @requires_auth
+    # @requires_auth
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
     def post(self):
-        values = json.loads(request.get_json(force=True))
-        print(values)
         self.index()
-        return {"Message" : "Value Printed"}, 200
+        filename = 'Regressor_model.sav'
+        new_player = []
+        values = json.loads(request.get_json(force=True))
+        for i in range(5):
+            new_player.append(values['Value_' + str(i)])
+        reg = pickle.load(open(filename, 'rb'))
+        overall_rating = self.calc_overall(new_player, reg)
+        print(overall_rating)
+        return {"Overall_Rating": overall_rating[0]}, 200
+
+    @staticmethod
+    def calc_overall(new_player, model):
+        return model.predict([new_player])
+
     @staticmethod
     def index():
         with counter.get_lock():
@@ -153,15 +159,16 @@ class Test(Resource):
     @api.response(200, 'OK')
     @api.doc(description="Test the api using json")
     def get(self):
-        json_dict = '{ "Value_1": 15 , "Value_2": 20 ,"Value_3": 25 ,"Value_4" : 30, "Value_5": 35 } '
-        url = "http://localhost:3000/post_sample"
+        json_dict = '{ "Value_0": 66 , "Value_1": 68 ,"Value_2": 64 ,"Value_3" : 67, "Value_4": 70 } '
+        url = "http://localhost:3000/overall"
         token = request.headers.get('AUTH-TOKEN')
 
-
-        headers = {'Content-Type': 'application/json','AUTH-TOKEN':token}
+        headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
 
         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
         return r.text
+
+
 # @api.route('/test_admin')
 # class Test(Resource):
 #     @api.response(404, 'Not Found')
