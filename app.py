@@ -5,6 +5,9 @@ from os import environ as env
 import datetime
 import pytz
 import json
+import pandas as pd
+from sklearn.neighbors import NearestNeighbors
+from sklearn.utils import shuffle
 from functools import wraps
 import jwt
 import pickle
@@ -23,6 +26,7 @@ TODAY = datetime.datetime.now(tz=TZ).date()
 PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
 counter = Value('i', 0)
+counter_nearest_player = Value('i', 0)
 
 
 class AuthenticationToken:
@@ -124,7 +128,7 @@ class User(Resource):
 # Sample POST
 @api.route('/overall')
 class Payment(Resource):
-    # @requires_auth
+    @requires_auth
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
@@ -152,6 +156,48 @@ class Payment(Resource):
         return jsonify(count=counter.value)
 
 
+@api.route('/closest_player')
+class Payment(Resource):
+    @requires_auth
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.response(200, 'OK')
+    @api.response(409, 'Conflict')
+    def post(self):
+        self.index()
+
+        new_player = []
+        values = json.loads(request.get_json(force=True))
+        for i in range(5):
+            new_player.append(values['Value_' + str(i)])
+        closest_players = self.closest(new_player)
+
+        return {"Closest_Player": closest_players}, 200
+
+    @staticmethod
+    def closest(new_player):
+        df = pd.read_csv('data.csv', index_col=0)
+        df = shuffle(df, random_state=10)
+
+        df = df[['Reactions', 'Composure', 'Vision', 'ShortPassing', 'BallControl', 'Name']]
+        df = df.dropna()
+
+        X = df.drop('Name', axis=1)
+        y = df['Name']
+        neigh = NearestNeighbors(n_neighbors=3)
+        neigh.fit(X)
+        preds = neigh.kneighbors([new_player], 3, return_distance=False)
+
+        closest_players = [y.iloc[pred] for pred in preds[0]]
+        return closest_players
+
+    @staticmethod
+    def index():
+        with counter_nearest_player.get_lock():
+            counter_nearest_player.value += 1
+        return jsonify(count=counter_nearest_player.value)
+
+
 @api.route('/test')
 class Test(Resource):
     @api.response(404, 'Not Found')
@@ -168,32 +214,33 @@ class Test(Resource):
         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
         return r.text
 
-
-# @api.route('/test_admin')
-# class Test(Resource):
-#     @api.response(404, 'Not Found')
-#     @api.response(201, 'Created')
-#     @api.response(200, 'OK')
-#     @api.doc(description="Test the api using json")
-#     def get(self):
-#         json_dict = '{ "Value_1": 15 , "Value_2": 20 ,"Value_3": 25 ,"Value_4" : 30, "Value_5": 35 } '
-#         url = "http://localhost:3000/post_sample"
-#         username = 'admin'
-#         password = 'admin'
-#         headers = {'Content-Type': 'application/json'}
-#
-#         r = requests.post(url, data=json.dumps(json_dict), headers=headers, auth=HTTPBasicAuth(username, password))
-#         return r.text
-
-
-@api.route('/test_counter')
+@api.route('/testclosest')
 class Test(Resource):
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.doc(description="Test the api using json")
     def get(self):
-        return jsonify(count=counter.value)
+        json_dict = '{ "Value_0": 95, "Value_1": 96 ,"Value_2": 94 ,"Value_3" : 90, "Value_4": 96 } '
+        url = "http://localhost:3000/closest_player"
+        token = request.headers.get('AUTH-TOKEN')
+
+        headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
+
+        r = requests.post(url, data=json.dumps(json_dict), headers=headers)
+        return r.text
+
+
+
+@api.route('/test_counter')
+class Test(Resource):
+    @requires_auth
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.response(200, 'OK')
+    @api.doc(description="Test the api using json")
+    def get(self):
+        return jsonify(count=counter.value, count_nearest_player=counter_nearest_player.value)
 
 
 if __name__ == '__main__':
