@@ -72,6 +72,7 @@ player = api.model('Player', {
     'Overall': fields.Float,
     'Wage': fields.Integer,
     'Reactions': fields.Integer,
+    'Age' :fields.Integer,
     'Composure': fields.Integer,
     'Vision': fields.Integer,
     'ShortPassing': fields.Integer,
