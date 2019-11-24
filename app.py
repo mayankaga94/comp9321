@@ -93,7 +93,7 @@ credential_parser.add_argument('username', type=str)
 credential_parser.add_argument('password', type=str)
 
 
-def name(s):
+def name_reduced(s):
     # split the string into a list
     l = s.split()
     new = ""
@@ -105,6 +105,7 @@ def name(s):
     new += l[-1].title()
 
     return new
+
 
 @api.route('/token')
 class Token(Resource):
@@ -147,12 +148,32 @@ class Players(Resource):
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
     def get(self, name):
-        name = name()
+        name = name_reduced(name)
         df = pd.read_csv('data_reduced.csv', index_col=0)
-        return df[df['Name'] == name].to_json() , 200
+        if df.empty:
+            return {"message": "Player not found"}, 401
+        else:
+            return df[df['Name'] == name].to_json(), 200
+
+    # def post(self,name):
+    #     df = pd.read_csv('data_reduced.csv', index_col=0)
+    #     values = json.loads(request.get_json(force=True))
+    #     new_player = []
+    #     new_player.append(values['ID'])
+    #     new_player.append(values['Name'])
+    #     new_player.append(values['Nationality'])
+    #     new_player.append(values['Overall'])
+    #     new_player.append(values['Wage'])
+    #     new_player.append(values['Reactions'])
+    #     new_player.append(values['Composure'])
+    #
+    #     new_player.append(values['Vision'])
+    #     new_player.append(values['ShortPassing'])
+    #     new_player.append(values['BallControl'])
+    #     new_player.append(values['Photo'])
+    #     new_player.append(values['Flag'])
 
 
-    # Sample POST
 @api.route('/overall')
 class Overall(Resource):
     # @requires_auth
