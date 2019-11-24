@@ -115,12 +115,15 @@ def name_reduced(s):
     l = s.split()
     
     l = [i.capitalize() for i in l]
+    for v,i in enumerate(l):
+        if "-" in i:
+        temp = i.split("-")
     
-    if len(l) > 1:
-        name = " ".join(l)
-    
-    else:
-        name = "".join(l)
+        temp = [j.capitalize() for j in temp]
+        temp_name = "-".join(j for j in temp)
+        l[v] = i.replace(i,temp_name)
+
+    name = " ".join(i for i in l)
 
     return name
 
