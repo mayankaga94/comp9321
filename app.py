@@ -93,6 +93,19 @@ credential_parser.add_argument('username', type=str)
 credential_parser.add_argument('password', type=str)
 
 
+def name(s):
+    # split the string into a list
+    l = s.split()
+    new = ""
+    # traverse in the list
+    for i in range(len(l) - 1):
+        s = l[i]
+        new += (s[0].upper() + '. ')
+
+    new += l[-1].title()
+
+    return new
+
 @api.route('/token')
 class Token(Resource):
     @api.response(200, 'Successful')
@@ -113,26 +126,41 @@ class Token(Resource):
         return {"message": "authorization has been refused for those credentials."}, 401
 
 
-@api.route('/sample')
-class User(Resource):
-    @requires_auth
+@api.route('/player')
+class Player(Resource):
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
+    @api.doc(description="Returns 1000 players")
     @api.response(200, 'OK')
-    @api.doc(description="SAMPLE GET")
+    @api.response(409, 'Conflict')
     def get(self):
-        print("Hello")
-        return
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        print(df.head())
+        return df.head(1000).to_json(), 200
 
 
-# Sample POST
+@api.route('/player/<name>')
+class Players(Resource):
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.doc(description="Returns 1000 players")
+    @api.response(200, 'OK')
+    @api.response(409, 'Conflict')
+    def get(self, name):
+        name = name()
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        return df[df['Name'] == name].to_json() , 200
+
+
+    # Sample POST
 @api.route('/overall')
-class Payment(Resource):
-    @requires_auth
+class Overall(Resource):
+    # @requires_auth
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
+    @api.doc(description="Predicts overall rating based on a given variables")
     def post(self):
         self.index()
         filename = 'Regressor_model.sav'
@@ -156,13 +184,14 @@ class Payment(Resource):
         return jsonify(count=counter.value)
 
 
-@api.route('/closest_player')
-class Payment(Resource):
-    @requires_auth
+@api.route('/closest')
+class Closest(Resource):
+    # @requires_auth
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
+    @api.doc(description="Returns top three closest players")
     def post(self):
         self.index()
 
@@ -198,41 +227,41 @@ class Payment(Resource):
         return jsonify(count=counter_nearest_player.value)
 
 
-@api.route('/test')
-class Test(Resource):
-    @api.response(404, 'Not Found')
-    @api.response(201, 'Created')
-    @api.response(200, 'OK')
-    @api.doc(description="Test the api using json")
-    def get(self):
-        json_dict = '{ "Value_0": 66 , "Value_1": 68 ,"Value_2": 64 ,"Value_3" : 67, "Value_4": 70 } '
-        url = "http://localhost:3000/overall"
-        token = request.headers.get('AUTH-TOKEN')
+# @api.route('/test')
+# class Test(Resource):
+#     @api.response(404, 'Not Found')
+#     @api.response(201, 'Created')
+#     @api.response(200, 'OK')
+#     @api.doc(description="Test the api using json")
+#     def get(self):
+#         json_dict = '{ "Value_0": 66 , "Value_1": 68 ,"Value_2": 64 ,"Value_3" : 67, "Value_4": 70 } '
+#         url = "http://localhost:3000/overall"
+#         token = request.headers.get('AUTH-TOKEN')
+#
+#         headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
+#
+#         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
+#         return r.text
+#
+# @api.route('/testclosest')
+# class Test(Resource):
+#     @api.response(404, 'Not Found')
+#     @api.response(201, 'Created')
+#     @api.response(200, 'OK')
+#     @api.doc(description="Test the api using json")
+#     def get(self):
+#         json_dict = '{ "Value_0": 95, "Value_1": 96 ,"Value_2": 94 ,"Value_3" : 90, "Value_4": 96 } '
+#         url = "http://localhost:3000/closest"
+#         token = request.headers.get('AUTH-TOKEN')
+#
+#         headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
+#
+#         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
+#         return r.text
+#
+#
 
-        headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
-
-        r = requests.post(url, data=json.dumps(json_dict), headers=headers)
-        return r.text
-
-@api.route('/testclosest')
-class Test(Resource):
-    @api.response(404, 'Not Found')
-    @api.response(201, 'Created')
-    @api.response(200, 'OK')
-    @api.doc(description="Test the api using json")
-    def get(self):
-        json_dict = '{ "Value_0": 95, "Value_1": 96 ,"Value_2": 94 ,"Value_3" : 90, "Value_4": 96 } '
-        url = "http://localhost:3000/closest_player"
-        token = request.headers.get('AUTH-TOKEN')
-
-        headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
-
-        r = requests.post(url, data=json.dumps(json_dict), headers=headers)
-        return r.text
-
-
-
-@api.route('/test_counter')
+@api.route('/counter')
 class Test(Resource):
     @requires_auth
     @api.response(404, 'Not Found')
