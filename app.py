@@ -19,6 +19,11 @@ PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
 counter = Value('i', 0)
 counter_nearest_player = Value('i', 0)
+counter_team = Value('i',0)
+counter_tags = Value('i',0)
+counter_player = Value('i',0)
+counter_rating = Value('i',0)
+
 
 
 class AuthenticationToken:
@@ -37,6 +42,14 @@ class AuthenticationToken:
         info = jwt.decode(token, self.secret_key, algorithms=['HS256'])
         return info['username']
 
+def validate_new_data(data):
+    for i in data:
+        if i>100:
+            return False
+    if 0 or None or "string" in data:
+        return False
+    else:
+        return True
 
 SECRET_KEY = "A SECRET KEY; USUALLY A VERY LONG RANDOM STRING"
 expires_in = 600
@@ -113,10 +126,17 @@ credential_parser.add_argument('password', type=str)
 def name_reduced(s):
     # split the string into a list
     l = s.split()
-    
-    l = [i.capitalize() for i in l]
 
-    name = " ".join(l)
+    l = [i.capitalize() for i in l]
+    for v, i in enumerate(l):
+        if "-" in i:
+            temp = i.split("-")
+
+            temp = [j.capitalize() for j in temp]
+            temp_name = "-".join(j for j in temp)
+            l[v] = i.replace(i, temp_name)
+
+    name = " ".join(i for i in l)
 
     return name
 
@@ -152,6 +172,7 @@ class Player(Resource):
     @api.response(409, 'Conflict')
     @api.response(500, 'Internal Server Error')
     def get(self):
+        self.index()
         df = pd.read_csv('data_reduced.csv', index_col=0)
 
         return df.head(1000).to_dict('index'), 200
@@ -160,18 +181,30 @@ class Player(Resource):
     @api.expect(player)
     @api.doc(description="Add a new player")
     def post(self):
+        self.index()
         df = pd.read_csv('data_reduced.csv', index_col=0)
         values = request.get_json(force=True)
+        try :
+            new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
+                          values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
+                          values['BallControl'], values['Photo'], values['Flag']]
+        except:
+            return {'Message' : 'Missing Values. Enter all Values'} ,422
+        val = validate_new_data(new_player)
+        if val  :
+            df = df.append(pd.Series(new_player,
+                                     index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
+                                            'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag']), ignore_index=True)
+            df.to_csv('data_reduced.csv')
+            return 200
+        else:
+            return {'Message': 'Value Error'}, 422
 
-        new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
-                      values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
-                      values['BallControl'], values['Photo'], values['Flag']]
-        df = df.append(pd.Series(new_player,
-                                 index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
-                                        'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag']), ignore_index=True)
-        df.to_csv('data_reduced.csv')
-        return 200
-
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter_player.value += 1
+        return jsonify(count=counter_player.value)
 
 @api.route('/rating/<name>')
 class Rating(Resource):
@@ -182,6 +215,7 @@ class Rating(Resource):
     @api.response(409, 'Conflict')
     @api.response(500, 'Internal Server Error')
     def get(self, name):
+        self.index()
         name = name_reduced(name)
         # name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
@@ -198,6 +232,11 @@ class Rating(Resource):
         else:
             return {"message": "Player not found"}, 401
 
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter_rating.value += 1
+        return jsonify(count=counter_rating.value)
 
 @api.route('/tags/<name>')
 class Tags(Resource):
@@ -208,6 +247,7 @@ class Tags(Resource):
     @api.response(409, 'Conflict')
     @api.response(500, 'Internal Server Error')
     def get(self, name):
+        self.index()
         name = name_reduced(name)
         # name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
@@ -231,6 +271,11 @@ class Tags(Resource):
         else :
             return {"message": "Player not found"}, 401
 
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter_tags.value += 1
+        return jsonify(count=counter_tags.value)
 
 @api.route('/team/<country>')
 class Teams(Resource):
@@ -241,6 +286,7 @@ class Teams(Resource):
     @api.response(409, 'Conflict')
     @api.response(500, 'Internal Server Error')
     def get(self, country):
+        self.index()
         Country = country.capitalize()
         df = pd.read_csv('fifa_players.csv', encoding='ISO-8859-1')
         players = df.query(f"nationality == '{Country}'")
@@ -251,6 +297,11 @@ class Teams(Resource):
             team = {'Team':players_list}
             return team, 200
 
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter_team.value += 1
+        return jsonify(count=counter_team.value)
 
 
 @api.route('/player/<name>')
@@ -262,6 +313,7 @@ class Players(Resource):
     @api.response(409, 'Conflict')
     @api.response(500, 'Internal Server Error')
     def get(self, name):
+        self.index()
         name = name_reduced(name)
         df = pd.read_csv('data_reduced.csv', index_col=0)
 
@@ -275,10 +327,10 @@ class Players(Resource):
     @api.expect(player)
     @api.doc(description="Update a player on the player name")
     def put(self, name):
+        self.index()
         df = pd.read_csv('data_reduced.csv', index_col=0)
 
         values = request.get_json(force=True)
-
         name = name_reduced(name)
         # name = name.capitalize()
         df2 = df[df['Name'] == name]
@@ -286,10 +338,18 @@ class Players(Resource):
             return {"message": "Player not found"}, 401
         else:
             for i in values.keys():
-
-                df.loc[df.Name == name, i] = values[i]
+                if i in [None,'string',0]:
+                    return {'Message' : 'Value Error'}, 422
+                else :
+                    df.loc[df.Name == name, i] = values[i]
             df.to_csv('data_reduced.csv')
             return 200
+
+    @staticmethod
+    def index():
+        with counter.get_lock():
+            counter_player.value += 1
+        return jsonify(count=counter_player.value)
 
     @api.doc(description="Delete a player on the player name")
     def delete(self, name):
@@ -323,10 +383,15 @@ class Overall(Resource):
         values = request.get_json(force=True)
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
-        reg = pickle.load(open(filename, 'rb'))
-        overall_rating = self.calc_overall(new_player, reg)
-        print(overall_rating)
-        return {"Overall_Rating": overall_rating[0]}, 200
+        val = validate_new_data(new_player)
+        if val :
+            reg = pickle.load(open(filename, 'rb'))
+            overall_rating = self.calc_overall(new_player, reg)
+            print(overall_rating)
+            return {"Overall_Rating": overall_rating[0]}, 200
+        else :
+            return {'Message': 'Value Error'}, 422
+
 
     @staticmethod
     def calc_overall(new_player, model):
@@ -356,9 +421,14 @@ class Closest(Resource):
         values = request.get_json(force=True)
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
-        closest_players = self.closest(new_player)
+        val = validate_new_data(new_player)
+        if val :
 
-        return {"Closest_Player": closest_players}, 200
+            closest_players = self.closest(new_player)
+
+            return {"Closest_Player": closest_players}, 200
+        else:
+            return {'Message' : 'Value Error'}, 422
 
     @staticmethod
     def closest(new_player):
@@ -393,7 +463,7 @@ class Test(Resource):
     @api.response(500, 'Internal Server Error')
     @api.doc(description="Keep track of the number of times each Api is called")
     def get(self):
-        return jsonify(count=counter.value, count_nearest_player=counter_nearest_player.value)
+        return jsonify(count_overall=counter.value, count_closest=counter_nearest_player.value,team = counter_team.value,rating = counter_rating.value, tags = counter_tags.value,player = counter_player.value , total =counter.value + counter_nearest_player.value + counter_team.value + counter_rating.value + counter_player.value + counter_tags.value)
 
 
 if __name__ == '__main__':
