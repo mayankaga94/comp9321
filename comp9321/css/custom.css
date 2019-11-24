@@ -1,0 +1,117 @@
+#result,#composure,#vision,#short_passing,#reaction,#ball_control{
+	max-width: 300px;
+	float: left;
+	margin:10px;
+}
+.values_initial{
+padding: 10px;
+float: left;
+}
+.home-screen{
+	float: left;
+}
+.wrapper_header{
+	display: block;
+    float: left;
+    width: 100%;
+    font-size: 22px;
+    padding: 20px;
+    color: #1b312e;
+    background: #9ff39f;
+    border: 1px solid #ccc;
+}
+.admim_login button{
+	background: blue;
+	padding: 15px;
+	color: white;
+}
+.signup_form_1{
+    width: 360px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    border-radius: 3px;
+    background: rgba(86, 86, 86, 0.74);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    color: #fff;
+}
+   .recommended_players{
+   	 padding: 60px;
+    text-align: center;
+    font-size: 23px;
+    }
+.admim_login{
+	float: right;
+	font-size: 14px;
+}
+.slide_wrap_inner{
+	border-right:1px solid #ccc;
+	/*border-radius: 10px;*/
+}
+#reaction_html, #vision_html,#composure_html,#shortpassing_html,#ballcontrol_html{
+	color: #28693c;
+    font-size: 24px;
+    font-weight: 600;
+    padding-left: 10%;
+    float: left;
+    min-height: 35px;
+}
+.slide_wrap{
+	margin-top: 10px;
+	padding:50px !important;
+}
+.btn.btn-outline-light{
+	margin-left: 85px;
+}
+h2{
+	font-size: 18px !important;
+	margin: 0 !important;
+}
+.slider_content{
+	float: left;
+	width: 100%;
+	padding-left: 30px;
+}
+.fields{
+	float: left;
+	width: 100%;
+	padding-bottom: 10px;
+}
+.textbox {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid white;
+    background: transparent;
+    padding: 8px 0;
+    padding-top: 30px;
+    color: #fff;
+    min-height: 60px;
+}
+.display_none{
+	display: none;
+}
+.registration_wrapper{
+	position: absolute;
+	top: 10px;
+	z-index: 999;
+	right: 10px;
+	top: 65px;
+}
+.btn {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    width: 240px;
+    height: 40px;
+    background: #347fc0;
+    border: none;
+    color: #fff;
+}
+.close_btn {
+    position: absolute;
+    right: 15px;
+    font-size: 24px;
+    top: 5px;
+    cursor: pointer;
+}
