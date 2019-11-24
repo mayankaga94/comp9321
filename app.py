@@ -1,10 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_restplus import Resource, Api, fields
-from requests.auth import HTTPBasicAuth
-from os import environ as env
-import datetime
-import pytz
-import json
+import seaborn as sns
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import shuffle
@@ -13,16 +10,11 @@ import jwt
 import pickle
 from os import environ as env
 import datetime
-from sqlalchemy import exists, and_
-import pytz
-import requests
 import json
 from multiprocessing import Value
 from flask_restplus import abort, reqparse
 
-TZ = pytz.timezone('Australia/Sydney')
-NOW = datetime.datetime.now(tz=TZ).time()
-TODAY = datetime.datetime.now(tz=TZ).date()
+
 PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
 counter = Value('i', 0)
@@ -152,6 +144,69 @@ class Player(Resource):
                                         'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag']), ignore_index=True)
         df.to_csv('data_reduced.csv')
         return 200
+
+@api.route('/rating/<name>')
+class Rating(Resource):
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.doc(description="Returns plot of overall rating of a given player")
+    @api.response(200, 'OK')
+    @api.response(409, 'Conflict')
+    def get(self,name):
+        df = pd.read_csv('data.csv', index_col=0)
+        player = df.query(f"Name == '{name}'")
+        x = df['Overall']
+        player_rating = int(player['Overall'].to_string(index=False))
+        sns_plot = sns.kdeplot(x, shade=True)
+        plt.axvline(player_rating, 0, 1, color='red')
+        fig = sns_plot.get_figure()
+        fig.savefig("output.png")
+
+
+@api.route('/tags/<name>')
+class Tags(Resource):
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.doc(description="Returns tags of a given player")
+    @api.response(200, 'OK')
+    @api.response(409, 'Conflict')
+    def get(self, name):
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        second_df = pd.read_csv('fifa_cleaned.csv', index_col=0)
+        second_df = second_df[['name', 'tags']]
+        new_names = ['Name', 'Tags']
+        second_df.columns = new_names
+        merged_df = pd.merge(df, second_df, on='Name')
+        req = df.query(f"Name == '{name}'")
+        # req = merged_df.query("Name == "+str(name))
+        if req.empty():
+            return {"message": "Player not found"}, 401
+        else:
+            player_tags = req['Tags']
+            tags_list = player_tags[0].split('#')
+            tags_list = [e.strip(',') for e in tags_list if len(e) > 1]
+        return jsonify(tags_list), 200
+
+
+
+
+@api.route('/team/<country>')
+class Teams(Resource):
+    @api.response(404, 'Not Found')
+    @api.response(201, 'Created')
+    @api.doc(description="Returns team of a given country name")
+    @api.response(200, 'OK')
+    @api.response(409, 'Conflict')
+    def get(self, country):
+        df = pd.read_csv('fifa_players.csv', encoding='ISO-8859-1')
+        players = df.query(f"nationality == '{country}'")
+        if players.empty():
+            return {"message": "Team not found"}, 401
+        else :
+            players_list = [player for player in players['player']]
+            return jsonify(players_list), 200
+
+
 
 
 @api.route('/player/<name>')
