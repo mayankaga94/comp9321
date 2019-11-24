@@ -74,7 +74,7 @@ def requires_auth(f):
         if not token:
             abort(401, 'Authentication token is missing')
         try:
-            user = auth.validate_token(token)
+            auth.validate_token(token)
         except Exception as e:
             abort(401, e)
 
@@ -139,6 +139,20 @@ class Player(Resource):
         print(df.head())
         return df.head(1000).to_json(), 200
 
+    @api.doc(description="Add a new player")
+    def post(self):
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        values = json.loads(request.get_json(force=True))
+
+        new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
+                      values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
+                      values['BallControl'], values['Photo'], values['Flag']]
+        df = df.append(pd.Series(new_player,
+                                 index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
+                                        'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag']), ignore_index=True)
+        df.to_csv('data_reduced.csv')
+        return 200
+
 
 @api.route('/player/<name>')
 class Players(Resource):
@@ -150,28 +164,43 @@ class Players(Resource):
     def get(self, name):
         name = name_reduced(name)
         df = pd.read_csv('data_reduced.csv', index_col=0)
+        df = df[df['Name'] == name]
         if df.empty:
             return {"message": "Player not found"}, 401
         else:
             return df[df['Name'] == name].to_json(), 200
 
-    # def post(self,name):
-    #     df = pd.read_csv('data_reduced.csv', index_col=0)
-    #     values = json.loads(request.get_json(force=True))
-    #     new_player = []
-    #     new_player.append(values['ID'])
-    #     new_player.append(values['Name'])
-    #     new_player.append(values['Nationality'])
-    #     new_player.append(values['Overall'])
-    #     new_player.append(values['Wage'])
-    #     new_player.append(values['Reactions'])
-    #     new_player.append(values['Composure'])
-    #
-    #     new_player.append(values['Vision'])
-    #     new_player.append(values['ShortPassing'])
-    #     new_player.append(values['BallControl'])
-    #     new_player.append(values['Photo'])
-    #     new_player.append(values['Flag'])
+    @api.doc(description="Update a player on the player name")
+    def put(self, name):
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        values = json.loads(request.get_json(force=True))
+
+        name = name_reduced(name)
+        df2 = df[df['Name'] == name]
+        if df2.empty:
+            return {"message": "Player not found"}, 401
+        else:
+            new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
+                          values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
+                          values['BallControl'], values['Photo'], values['Flag']]
+            df1 = pd.Series(new_player,
+                            index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
+                                   'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag'])
+            df.loc[df['Name'] == name] = df1
+
+            df.to_csv('data_reduced.csv')
+            return 200
+
+    @api.doc(description="Delete a player on the player name")
+    def delete(self, name):
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        name = name_reduced(name)
+        df2 = df[df['Name'] == name]
+        if df2.empty:
+            return {"message": "Player not found"}, 401
+        else:
+            df.drop([name])
+            return 200
 
 
 @api.route('/overall')
@@ -187,8 +216,8 @@ class Overall(Resource):
         filename = 'Regressor_model.sav'
         new_player = []
         values = json.loads(request.get_json(force=True))
-        for i in range(5):
-            new_player.append(values['Value_' + str(i)])
+        new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
+                      values['BallControl']]
         reg = pickle.load(open(filename, 'rb'))
         overall_rating = self.calc_overall(new_player, reg)
         print(overall_rating)
@@ -218,8 +247,8 @@ class Closest(Resource):
 
         new_player = []
         values = json.loads(request.get_json(force=True))
-        for i in range(5):
-            new_player.append(values['Value_' + str(i)])
+        new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
+                      values['BallControl']]
         closest_players = self.closest(new_player)
 
         return {"Closest_Player": closest_players}, 200
@@ -248,47 +277,13 @@ class Closest(Resource):
         return jsonify(count=counter_nearest_player.value)
 
 
-# @api.route('/test')
-# class Test(Resource):
-#     @api.response(404, 'Not Found')
-#     @api.response(201, 'Created')
-#     @api.response(200, 'OK')
-#     @api.doc(description="Test the api using json")
-#     def get(self):
-#         json_dict = '{ "Value_0": 66 , "Value_1": 68 ,"Value_2": 64 ,"Value_3" : 67, "Value_4": 70 } '
-#         url = "http://localhost:3000/overall"
-#         token = request.headers.get('AUTH-TOKEN')
-#
-#         headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
-#
-#         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
-#         return r.text
-#
-# @api.route('/testclosest')
-# class Test(Resource):
-#     @api.response(404, 'Not Found')
-#     @api.response(201, 'Created')
-#     @api.response(200, 'OK')
-#     @api.doc(description="Test the api using json")
-#     def get(self):
-#         json_dict = '{ "Value_0": 95, "Value_1": 96 ,"Value_2": 94 ,"Value_3" : 90, "Value_4": 96 } '
-#         url = "http://localhost:3000/closest"
-#         token = request.headers.get('AUTH-TOKEN')
-#
-#         headers = {'Content-Type': 'application/json', 'AUTH-TOKEN': token}
-#
-#         r = requests.post(url, data=json.dumps(json_dict), headers=headers)
-#         return r.text
-#
-#
-
 @api.route('/counter')
 class Test(Resource):
     @requires_auth
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
-    @api.doc(description="Test the api using json")
+    @api.doc(description="Keep track of the number of times each Api is called")
     def get(self):
         return jsonify(count=counter.value, count_nearest_player=counter_nearest_player.value)
 
