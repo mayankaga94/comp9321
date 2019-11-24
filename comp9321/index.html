@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/custom.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Mr+De+Haviland|Stalemate" rel="stylesheet">
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<title>Prediction of players</title>
+	<script src="js/bootstrap.min.js"></script>
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="MobileOptimized" content="320" />
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="js/script.js"></script>
+	
+</head>
+
+<body>
+	<header class="wrapper_header">  
+		<div class="home-screen">
+			Welcome to Fifa player recommendation
+		</div>
+		<div class="admim_login"><button onclick="myFunction()">Admin Login</button></div>
+		             <div class="registration_wrapper" id = "signup_form" style="display: none;">
+	                    <div class="signup_form_1">
+	                        <div class="close_btn "><i class="fas fa-times "></i></div>
+	                        <form action=" " method="post ">
+	                        	Login
+	                            <div>
+		                            <div class="registration_details ">
+		                                <input name="username " type="text " id="username " class="textbox " size="30 " placeholder="First Name * " />
+		                                <input name="password " type="password " id="password " class="textbox " size="30 " placeholder="Password * " />
+		                                <input name="submit " type="submit " value="Login " class="btn register_btn " />
+		                            </div>
+	                            </div>
+	                        </form>
+	                    </div>
+                    </div>
+
+	</header>
+	<div class="wrapper row ">
+		<div class =" slide_wrap col-sm-6 col-lg-6 col-md-12">
+		<div class="slide_wrap_inner">
+			<div class="fields row">
+				<div style="" class="slider_content">
+					<h2>Reactions</h2>
+					<span class="values_initial">0</span><input id="reaction" type="range" min="51" max="100" value="0" /><span class="values_initial">100</span>
+				</div>
+				<div>
+					<p id="reaction_html"></p>
+				</div>
+			</div>
+			<div class="fields  row">
+				<div style="" class="slider_content">
+					<h2>Composure</h2>
+					<span class="values_initial">0</span><input id="composure" type="range" min="0" max="100" value="0" /><span class="values_initial">100</span>
+				</div>
+				<div>
+					<p id="composure_html"></p>
+				</div>
+			</div>
+			<div class="fields  row">
+				<div style="" class="slider_content">
+					<h2>Vision</h2>
+					<span class="values_initial">0</span><input id="vision" type="range" min="0" max="100" value="0" /><span class="values_initial">100</span>
+				</div>
+				<div>
+					<p id="vision_html"></p>
+				</div>
+			</div>
+			<div class="fields  row">
+				<div style="" class="slider_content">
+					<h2>Passing</h2>
+					<span class="values_initial">0</span><input id="short_passing" type="range" min="0" max="100" value="0" /><span class="values_initial">100</span>
+				</div>
+				<div>
+					<p id="shortpassing_html"></p>
+				</div>
+			</div>
+			<div class="fields  row">
+				<div style="" class="slider_content">
+					<h2>Ball Control</h2>
+					<span class="values_initial">0</span><input id="ball_control" type="range" min="0" max="100" value="0" /><span class="values_initial">100</span>
+				</div>
+				<div>
+					<p id="ballcontrol_html"></p>
+				</div>
+				<div>
+					<p id="ball_control_html"></p>
+				</div>
+			</div>
+			<div class="push_suggestion" id ="fetch_players">
+				<button type="button" class="btn btn-outline-light " id = "post_req">
+					Get Suggested player
+				</button>
+			</div>
+			<div id="overallacc"></div>
+			</div>
+		</div>
+		<div class ="col-sm-6 col-lg-6 col-md-12">
+			<div class="recommended_players" id ="recomm">
+				<div>Recommended players, which you may like </div>
+				<div class="list_players"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12 thousand_players">
+			 <div class="view_players" id = "view_players">View thousand  players</div>
+
+			 </div>
+	</div>
+
+</body>
+
+</html>
