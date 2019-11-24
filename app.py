@@ -44,8 +44,9 @@ class AuthenticationToken:
 
 def validate_new_data(data):
     for i in data:
-        if i>100:
-            return False
+        if isinstance(i, int):
+            if i>100:
+                return False
     if 0 or None or "string" in data:
         return False
     else:
@@ -114,13 +115,10 @@ def requires_auth(f):
 
 
 credential_model = api.model('credential', {
-    'username': fields.String,
-    'password': fields.String
+    'Username': fields.String,
+    'Password': fields.String
 })
 
-credential_parser = reqparse.RequestParser()
-credential_parser.add_argument('username', type=str)
-credential_parser.add_argument('password', type=str)
 
 
 def name_reduced(s):
@@ -146,13 +144,16 @@ class Token(Resource):
     @api.response(200, 'Successful')
     @api.response(500, 'Internal Server Error')
     @api.doc(description="Generates a authentication token")
-    @api.expect(credential_parser, validate=True)
-    def get(self):
-        args = credential_parser.parse_args()
-
-        username = args.get('username')
-        password = args.get('password')
-
+    # @api.expect(credential_parser, validate=True)
+    @api.expect(credential_model)
+    def post(self):
+        # args = credential_parser.parse_args()
+        #
+        # username = args.get('username')
+        # password = args.get('password')
+        values = request.get_json(force=True)
+        username = values['Username']
+        password = values['Password']
         if username == 'admin' and password == 'admin':
             #             print("Entered here")
             token_to_be_sent = auth.generate_token(username)
