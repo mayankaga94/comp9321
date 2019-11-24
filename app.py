@@ -271,6 +271,7 @@ class Players(Resource):
     @api.doc(description="Update a player on the player name")
     def put(self, name):
         df = pd.read_csv('data_reduced.csv', index_col=0)
+
         values = request.get_json(force=True)
 
         name = name_reduced(name)
@@ -278,14 +279,9 @@ class Players(Resource):
         if df2.empty:
             return {"message": "Player not found"}, 401
         else:
-            new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
-                          values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
-                          values['BallControl'], values['Photo'], values['Flag']]
-            df1 = pd.Series(new_player,
-                            index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
-                                   'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag'])
-            df.loc[df['Name'] == name] = df1
+            for i in values.keys():
 
+                df.loc[df.Name == name, i] = values[i]
             df.to_csv('data_reduced.csv')
             return 200
 
