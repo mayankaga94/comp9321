@@ -14,7 +14,6 @@ import json
 from multiprocessing import Value
 from flask_restplus import abort, reqparse
 
-
 PORT = int(env.get("PORT", 3000))
 DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
 counter = Value('i', 0)
@@ -53,8 +52,31 @@ api = Api(app, authorizations={
 },
           security='API-KEY',
           default="FIFA Database",  # Default namespace
-          title="Service to predict the overall rating of a player based of values",  # Documentation Title
-          description="An application which receives the values and predicts the closest player ")  # Document Description
+          title="Services to provide insights and predictions on FIFA Dataset",  # Documentation Title
+          description="An application which uses the FIFA dataset to run machine learning algorithms to give the "
+                      "overall rating of a new player and three other closest players to the new player. The "
+                      "application also returns Graphs about the overall  player and details about the players")  #
+# Document Description
+prediction = api.model('Prediction', {
+    'Reactions': fields.Integer,
+    'Composure': fields.Integer,
+    'Vision': fields.Integer,
+    'ShortPassing': fields.Integer,
+    'BallControl': fields.Integer,
+})
+player = api.model('Player', {
+    'ID': fields.Integer,
+    'Name': fields.String,
+    'Overall': fields.Float,
+    'Wage': fields.Integer,
+    'Reactions': fields.Integer,
+    'Composure': fields.Integer,
+    'Vision': fields.Integer,
+    'ShortPassing': fields.Integer,
+    'BallControl': fields.Integer,
+    'Photo': fields.Url,
+    'Flag': fields.Url
+})
 
 
 def requires_auth(f):
@@ -119,6 +141,7 @@ class Token(Resource):
         return {"message": "authorization has been refused for those credentials."}, 401
 
 
+
 @api.route('/player')
 class Player(Resource):
     @api.response(404, 'Not Found')
@@ -128,9 +151,11 @@ class Player(Resource):
     @api.response(409, 'Conflict')
     def get(self):
         df = pd.read_csv('data_reduced.csv', index_col=0)
-        print(df.head())
-        return df.head(1000).to_json(), 200
 
+        return df.head(1000).to_dict('index'), 200
+
+
+    @api.expect(player)
     @api.doc(description="Add a new player")
     def post(self):
         df = pd.read_csv('data_reduced.csv', index_col=0)
@@ -145,6 +170,7 @@ class Player(Resource):
         df.to_csv('data_reduced.csv')
         return 200
 
+
 @api.route('/rating/<name>')
 class Rating(Resource):
     @api.response(404, 'Not Found')
@@ -152,7 +178,8 @@ class Rating(Resource):
     @api.doc(description="Returns plot of overall rating of a given player")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    def get(self,name):
+    def get(self, name):
+        name = name_reduced(name)
         df = pd.read_csv('data.csv', index_col=0)
         player = df.query(f"Name == '{name}'")
         x = df['Overall']
@@ -171,23 +198,27 @@ class Tags(Resource):
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
     def get(self, name):
-        df = pd.read_csv('data_reduced.csv', index_col=0)
+        name = name_reduced(name)
+        df = pd.read_csv('data.csv', index_col=0)
+        df = df[['Name', 'Age', 'Nationality', 'Overall', 'Wage', 'Reactions', \
+                 'Composure', 'Vision', 'ShortPassing', 'BallControl']]
+
         second_df = pd.read_csv('fifa_cleaned.csv', index_col=0)
         second_df = second_df[['name', 'tags']]
+
         new_names = ['Name', 'Tags']
         second_df.columns = new_names
+
         merged_df = pd.merge(df, second_df, on='Name')
-        req = df.query(f"Name == '{name}'")
-        # req = merged_df.query("Name == "+str(name))
-        if req.empty():
-            return {"message": "Player not found"}, 401
-        else:
+        req = merged_df.query(f"Name == '{name}'")
+        if len(req)!= 0:
             player_tags = req['Tags']
             tags_list = player_tags[0].split('#')
             tags_list = [e.strip(',') for e in tags_list if len(e) > 1]
-        return jsonify(tags_list), 200
-
-
+            players = {'Tags': tags_list}
+            return players, 200
+        else :
+            return {"message": "Player not found"}, 401
 
 
 @api.route('/team/<country>')
@@ -198,17 +229,19 @@ class Teams(Resource):
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
     def get(self, country):
+
+        Country = country.capitalize()
         df = pd.read_csv('fifa_players.csv', encoding='ISO-8859-1')
-        players = df.query(f"nationality == '{country}'")
-        if players.empty():
+        players = df.query(f"nationality == '{Country}'")
+        if len(players) == 0:
             return {"message": "Team not found"}, 401
-        else :
+        else:
             players_list = [player for player in players['player']]
-            return jsonify(players_list), 200
+            team = {'Team':players_list}
+            return team, 200
 
 
-
-
+@api.expect(player)
 @api.route('/player/<name>')
 class Players(Resource):
     @api.response(404, 'Not Found')
@@ -258,6 +291,7 @@ class Players(Resource):
             return 200
 
 
+@api.expect(prediction)
 @api.route('/overall')
 class Overall(Resource):
     # @requires_auth
@@ -289,6 +323,7 @@ class Overall(Resource):
         return jsonify(count=counter.value)
 
 
+@api.expect(prediction)
 @api.route('/closest')
 class Closest(Resource):
     # @requires_auth
