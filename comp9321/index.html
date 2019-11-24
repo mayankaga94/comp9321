@@ -16,7 +16,7 @@
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script src="js/script.js"></script>
-	
+	 
 </head>
 
 <body>
@@ -24,7 +24,7 @@
 		<div class="home-screen">
 			Welcome to Fifa player recommendation
 		</div>
-		<div class="admim_login"><button onclick="myFunction()">Admin Login</button></div>
+		<div class="admim_login" id ="admin_p"><button>Admin Login</button></div>
 		             <div class="registration_wrapper" id = "signup_form" style="display: none;">
 	                    <div class="signup_form_1">
 	                        <div class="close_btn "><i class="fas fa-times "></i></div>
@@ -32,9 +32,11 @@
 	                        	Login
 	                            <div>
 		                            <div class="registration_details ">
-		                                <input name="username " type="text " id="username " class="textbox " size="30 " placeholder="First Name * " />
-		                                <input name="password " type="password " id="password " class="textbox " size="30 " placeholder="Password * " />
-		                                <input name="submit " type="submit " value="Login " class="btn register_btn " />
+		                            	<div id ="username">admin</div>
+		                            	<div id ="password">admin</div>
+<!-- 		                                <input name="username " type="text " id="username " class="textbox " size="30 " placeholder="First_Name" />
+		                                <input name="password " type="password " id="password " class="textbox " size="30 " placeholder="Password * " /> -->
+		                                <input name="submit " type="submit " id ="submiti" value="Login " class="btn register_btn "/>
 		                            </div>
 	                            </div>
 	                        </form>
@@ -108,10 +110,39 @@
 			</div>
 		</div>
 	</div>
+							 		<div id ="getplayer">
+						 				<input id = "d" placeholder="Enter a player name"></input>
+
+						 					 <div id="player_naem_ratinf">Rner playe name/div>
+						 		 </div>
 	<div class="col-sm-12 thousand_players">
 			 <div class="view_players" id = "view_players">View thousand  players</div>
 
 			 </div>
+
+			 <div id="admin_section" style="display: none;"> The admin pannel
+			 		<div class="rem_player">Remove player</div>
+			 			   <!-- <input type="number" name="a" id="a"><br> -->
+
+			 			   <input id = "a" placeholder="Search for..."></input>
+							  <div id="rm_player">Remove player</div>
+
+
+
+						 		<div class="Addplayer">Add a new layer <input id = "b" placeholder="Add a player"></input>
+						 			  	 <div id="adp_layer">Add player</div>
+						 		</div>
+						 		<div id ="teamcountry">
+						 				<input id = "c" placeholder="Country"></input>
+
+						 					 <div id="country_find">Add player</div>
+						 		 </div>
+			</div>
+
+<!-- 			 		<div class="add_player">Remove player</div>
+
+			 		<div class="clickadd">H. Kane</div> -->
+	
 	</div>
 
 </body>
