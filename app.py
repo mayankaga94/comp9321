@@ -126,7 +126,6 @@ def name_reduced(s):
 @api.route('/token')
 class Token(Resource):
     @api.response(200, 'Successful')
-    @api.response(500, 'Internal Server Error')
     @api.doc(description="Generates a authentication token")
     @api.expect(credential_parser, validate=True)
     def get(self):
@@ -152,7 +151,6 @@ class Player(Resource):
     @api.doc(description="Returns 1000 players")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     def get(self):
         df = pd.read_csv('data_reduced.csv', index_col=0)
 
@@ -182,9 +180,9 @@ class Rating(Resource):
     @api.doc(description="Returns plot of overall rating of a given player")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     def get(self, name):
         name = name_reduced(name)
+        name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
         player = df.query(f"Name == '{name}'")
         if len(player)>0 :
@@ -207,9 +205,9 @@ class Tags(Resource):
     @api.doc(description="Returns tags of a given player")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     def get(self, name):
         name = name_reduced(name)
+        name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
         df = df[['Name', 'Age', 'Nationality', 'Overall', 'Wage', 'Reactions', \
                  'Composure', 'Vision', 'ShortPassing', 'BallControl']]
@@ -239,9 +237,7 @@ class Teams(Resource):
     @api.doc(description="Returns team of a given country name")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     def get(self, country):
-
         Country = country.capitalize()
         df = pd.read_csv('fifa_players.csv', encoding='ISO-8859-1')
         players = df.query(f"nationality == '{Country}'")
@@ -261,7 +257,6 @@ class Players(Resource):
     @api.doc(description="Returns 1000 players")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     def get(self, name):
         name = name_reduced(name)
         df = pd.read_csv('data_reduced.csv', index_col=0)
@@ -281,6 +276,7 @@ class Players(Resource):
         values = request.get_json(force=True)
 
         name = name_reduced(name)
+        name = name.capitalize()
         df2 = df[df['Name'] == name]
         if df2.empty:
             return {"message": "Player not found"}, 401
@@ -295,6 +291,7 @@ class Players(Resource):
     def delete(self, name):
         df = pd.read_csv('data_reduced.csv', index_col=0)
         name = name_reduced(name)
+        name = name.capitalize()
         df2 = df[df['Name'] == name]
         if df2.empty:
             return {"message": "Player not found"}, 401
@@ -312,7 +309,6 @@ class Overall(Resource):
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     @api.doc(description="Predicts overall rating based on a given variables")
     def post(self):
         self.index()
@@ -345,7 +341,6 @@ class Closest(Resource):
     @api.response(201, 'Created')
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
-    @api.response(500, 'Internal Server Error')
     @api.doc(description="Returns top three closest players")
     def post(self):
         self.index()
@@ -388,7 +383,6 @@ class Test(Resource):
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
-    @api.response(500, 'Internal Server Error')
     @api.doc(description="Keep track of the number of times each Api is called")
     def get(self):
         return jsonify(count=counter.value, count_nearest_player=counter_nearest_player.value)
