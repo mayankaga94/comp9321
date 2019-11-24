@@ -115,8 +115,12 @@ def name_reduced(s):
     l = s.split()
     
     l = [i.capitalize() for i in l]
-
-    name = " ".join(l)
+    
+    if len(l) > 1:
+        name = " ".join(l)
+    
+    else:
+        name = "".join(l)
 
     return name
 
