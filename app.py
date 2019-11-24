@@ -112,15 +112,12 @@ credential_parser.add_argument('password', type=str)
 def name_reduced(s):
     # split the string into a list
     l = s.split()
-    new = ""
-    # traverse in the list
-    for i in range(len(l) - 1):
-        s = l[i]
-        new += (s[0].upper() + '. ')
+    
+    l = [i.capitalize() for i in l]
 
-    new += l[-1].title()
+    name = " ".join(l)
 
-    return new
+    return name
 
 
 @api.route('/token')
@@ -185,7 +182,7 @@ class Rating(Resource):
     @api.response(500, 'Internal Server Error')
     def get(self, name):
         name = name_reduced(name)
-        name = name.capitalize()
+        # name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
         player = df.query(f"Name == '{name}'")
         if len(player)>0 :
@@ -211,7 +208,7 @@ class Tags(Resource):
     @api.response(500, 'Internal Server Error')
     def get(self, name):
         name = name_reduced(name)
-        name = name.capitalize()
+        # name = name.capitalize()
         df = pd.read_csv('data.csv', index_col=0)
         df = df[['Name', 'Age', 'Nationality', 'Overall', 'Wage', 'Reactions', \
                  'Composure', 'Vision', 'ShortPassing', 'BallControl']]
@@ -282,7 +279,7 @@ class Players(Resource):
         values = request.get_json(force=True)
 
         name = name_reduced(name)
-        name = name.capitalize()
+        # name = name.capitalize()
         df2 = df[df['Name'] == name]
         if df2.empty:
             return {"message": "Player not found"}, 401
@@ -297,8 +294,9 @@ class Players(Resource):
     def delete(self, name):
         df = pd.read_csv('data_reduced.csv', index_col=0)
         name = name_reduced(name)
-        name = name.capitalize()
+        # print(name)
         df2 = df[df['Name'] == name]
+        print(df2)
         if df2.empty:
             return {"message": "Player not found"}, 401
         else:
