@@ -138,9 +138,9 @@ class Token(Resource):
             #             print("Entered here")
             token_to_be_sent = auth.generate_token(username)
             #             print(token_to_be_sent)
-            return {"token": str(token_to_be_sent, 'utf-8')}
-
-        return {"message": "authorization has been refused for those credentials."}, 401
+            return {'token': str(token_to_be_sent,'utf-8')},200
+        else :
+            return {"message": "authorization has been refused for those credentials."}, 401
 
 
 
