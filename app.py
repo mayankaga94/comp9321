@@ -9,6 +9,7 @@ from functools import wraps
 import jwt
 import pickle
 from os import environ as env
+import os
 import datetime
 import json
 from multiprocessing import Value
@@ -67,6 +68,7 @@ prediction = api.model('Prediction', {
 player = api.model('Player', {
     'ID': fields.Integer,
     'Name': fields.String,
+    'Nationality':fields.String,
     'Overall': fields.Float,
     'Wage': fields.Integer,
     'Reactions': fields.Integer,
@@ -159,7 +161,7 @@ class Player(Resource):
     @api.doc(description="Add a new player")
     def post(self):
         df = pd.read_csv('data_reduced.csv', index_col=0)
-        values = json.loads(request.get_json(force=True))
+        values = request.get_json(force=True)
 
         new_player = [values['ID'], values['Name'], values['Nationality'], values['Overall'], values['Wage'],
                       values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
@@ -182,12 +184,17 @@ class Rating(Resource):
         name = name_reduced(name)
         df = pd.read_csv('data.csv', index_col=0)
         player = df.query(f"Name == '{name}'")
-        x = df['Overall']
-        player_rating = int(player['Overall'].to_string(index=False))
-        sns_plot = sns.kdeplot(x, shade=True)
-        plt.axvline(player_rating, 0, 1, color='red')
-        fig = sns_plot.get_figure()
-        fig.savefig("output.png")
+        if len(player)>0 :
+            x = df['Overall']
+            plt.clf()
+            player_rating = int(player['Overall'].to_string(index=False))
+            sns_plot = sns.kdeplot(x, shade=True)
+            plt.axvline(player_rating, 0, 1, color='red')
+            fig = sns_plot.get_figure()
+            fig.savefig("output.png")
+            return 200
+        else:
+            return {"message": "Player not found"}, 401
 
 
 @api.route('/tags/<name>')
@@ -241,7 +248,7 @@ class Teams(Resource):
             return team, 200
 
 
-@api.expect(player)
+
 @api.route('/player/<name>')
 class Players(Resource):
     @api.response(404, 'Not Found')
@@ -252,16 +259,19 @@ class Players(Resource):
     def get(self, name):
         name = name_reduced(name)
         df = pd.read_csv('data_reduced.csv', index_col=0)
+
         df = df[df['Name'] == name]
+        print(df)
         if df.empty:
             return {"message": "Player not found"}, 401
         else:
-            return df[df['Name'] == name].to_json(), 200
+            return df.to_dict('records'), 200
 
+    @api.expect(player)
     @api.doc(description="Update a player on the player name")
     def put(self, name):
         df = pd.read_csv('data_reduced.csv', index_col=0)
-        values = json.loads(request.get_json(force=True))
+        values = request.get_json(force=True)
 
         name = name_reduced(name)
         df2 = df[df['Name'] == name]
@@ -287,7 +297,8 @@ class Players(Resource):
         if df2.empty:
             return {"message": "Player not found"}, 401
         else:
-            df.drop([name])
+            df = df[df.Name != name]
+            df.to_csv('data_reduced.csv')
             return 200
 
 
@@ -304,7 +315,7 @@ class Overall(Resource):
         self.index()
         filename = 'Regressor_model.sav'
         new_player = []
-        values = json.loads(request.get_json(force=True))
+        values = request.get_json(force=True)
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
         reg = pickle.load(open(filename, 'rb'))
@@ -336,7 +347,7 @@ class Closest(Resource):
         self.index()
 
         new_player = []
-        values = json.loads(request.get_json(force=True))
+        values = request.get_json(force=True)
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
         closest_players = self.closest(new_player)
