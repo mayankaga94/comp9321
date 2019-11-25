@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 	document.getElementById("submiti").addEventListener("click", myFunction_1);
 	function myFunction_1(e){
-    var verify_username= document.getElementById("username").textContent;;
-    var verify_pass= document.getElementById("password").textContent;;
+    var verify_username= document.getElementById("e").value;
+    var verify_pass= document.getElementById("f").value;
   	 const user = {
         Username: `${verify_username}`,
         Password: `${verify_pass}`
@@ -24,9 +24,10 @@ document.addEventListener('DOMContentLoaded', function(){
     .then(res => res.json())
      .then(json =>myfunc(json))
     function myfunc(jsons){
-    	alert(jsons.token)
+    	// alert(jsons.token)
     	localStorage.setItem('token',jsons.token)
     	 var tokenid=localStorage.getItem('token')
+    	 alert("Permision Granted")
  			document.getElementById('admin_section').style.display = "block";
 
 	document.getElementById("rm_player").addEventListener("click", remove);
@@ -42,7 +43,20 @@ document.addEventListener('DOMContentLoaded', function(){
 					.then(res => console.log(res))
 
 }
+
+
+				
+}
+
 // for adding a plater 
+
+document.getElementById("close_btn").addEventListener("click", close_login)
+
+function close_login(e){
+document.getElementById('signup_form').style.display = "none";
+
+
+// ---------for getting player flas and plot --------------------------
 
 document.getElementById("adp_layer").addEventListener("click", add);
 
@@ -69,17 +83,18 @@ document.getElementById("adp_layer").addEventListener("click", add);
 		}
 // ----------------------------------admin ends -----------------------------------------------------------
 
-// ----------------------------get tea contry --------------------------
 
-document.getElementById("country_find").addEventListener("click", country);
 
-	function country(e){
+
+document.getElementById("country_find").addEventListener("click", country_team);
+
+	function country_team(e){
 		 country_name = document.getElementById("c").value;
 		 alert(`${country_name}`)
-			var player = [];
+			var player_team_ = [];
 		          const options_new ={
 				        method :'GET',
-				        body: JSON.stringify()
+				        // body: JSON.stringify(country_name)
 				    }
 				     fetch(`${apiUrl}/team/${country_name}`,options_new)
 					  .then(response => {
@@ -91,16 +106,24 @@ document.getElementById("country_find").addEventListener("click", country);
 						 .then(json => {
 
 						       this.users = json;
-						      console.log(this.users)
-						       // for (i in player[0]){					       		
-						       // 		// view_players_wrapper = document.getElementById("view_players")
-						       // 		console.log(player[0][i])
-						       // }
+						      player_team_.push(this.users)
+
+						       for (i in player_team_[0].Team){					       		
+						       	var iDiv2 = document.createElement('div');
+										abili2 = document.getElementById("get_countryplayer");
+										iDiv2.append(player_team_[0].Team[i])
+										abili2.append(iDiv2)
+						       		// view_players_wrapper = document.getElementById("view_players")
+						       		// console.log(player_team_[0].Team[i])
+						       }
 						   })
             		 e.preventDefault();    
 		      }
 
-// ---------for getting player flas and plot --------------------------
+
+// ----------------------------get tea contry --------------------------
+
+
 
 document.getElementById("player_naem_ratinf").addEventListener("click", country);
 	function country(e){
@@ -120,12 +143,20 @@ document.getElementById("player_naem_ratinf").addEventListener("click", country)
 						   })
 						 .then(json => {
 						       this.player = json;
-						      // console.log(this.player)
 						      player_plots.push(this.player)
-						      // console.log(player_plots[0].Tags)
+						      player_plotx = document.getElementById("view_ab");
+						     
+						      // player_plotx.innerHTML =  "`${player_plot}` abilities are :";
 						       for (i in player_plots[0].Tags ){					       		
 						       		// view_players_wrapper = document.getElementById("view_players")
-						       		console.log(player_plots[0].Tags[i])
+										var iDiv = document.createElement('div');
+										abili = document.getElementById("abil");
+										iDiv.id = 'abilities';
+										// iDiv.className = 'block';
+
+										iDiv.append(player_plots[0].Tags[i]);
+										abili.append(iDiv);
+						       		// console.log(player_plots[0].Tags[i])
 						       }
 						   })
             		 e.preventDefault();    
@@ -196,6 +227,8 @@ document.getElementById("view_players").addEventListener("click", viewplayersfun
 document.getElementById('fetch_players').onclick = closestfunction;
 	function closestfunction(){
 					// recomm_res = document.getElementById("recomm");
+					// lisr
+					var closest = [];
 					var res = parseInt(reaction_html.innerHTML);
 					var comp = parseInt(composure_html.innerHTML);
 					var vis = parseInt(vision_html.innerHTML);
@@ -216,18 +249,28 @@ document.getElementById('fetch_players').onclick = closestfunction;
 				       .then(res => res.json())
 				       .then(json =>myfunc(json))
   							  function myfunc(jsons){
-  							  	var div_1 = document.getElementById('view_players');
+  							  	var div_1 = document.getElementById('view_players_rating');
   							  	div_1.innerHTML += jsons.Overall_Rating;
   							  	// implementation of getting closest player						
 			  						fetch(`${apiUrl}/closest`,options_new)
 							       .then(res_1 => res_1.json())
 							       .then(jsonz =>myfunc(jsonz))
 			  							  function myfunc(jsonz){
-			  							  	for (j in jsonz){
-			  							  		// console.log(j)
-			  							  var recomm_res = document.getElementById('recomm');
-  							  						recomm_res.innerHTML += jsonz.Closest_Player;
-			  					}
+
+			  							  		// console.log(jsonz.Closest_Player);
+			  							  		closest.push(jsonz.Closest_Player);
+			  							  		console.log(closest[0]);
+			  							  	for (j in closest[0] )
+			  							  	{
+			  							  		var recomm_res = document.getElementById('recomm');
+					  							 var iDiv3 = document.createElement('div');
+												iDiv3.id = 'similar';
+												iDiv3.append(closest[0][j])
+
+			  							  			recomm_res.append(iDiv3);
+			  							  	}
+			  							  	
+
 			  				}
                          }
 					}

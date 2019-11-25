@@ -24,16 +24,20 @@
 		<div class="home-screen">
 			Welcome to Fifa player recommendation
 		</div>
-		<div class="admim_login" id ="admin_p"><button>Admin Login</button></div>
+		<div class="admim_login" id ="admin_p"><button class="btn btn-outline-light ">Admin Login</button></div>
 		             <div class="registration_wrapper" id = "signup_form" style="display: none;">
 	                    <div class="signup_form_1">
-	                        <div class="close_btn "><i class="fas fa-times "></i></div>
+	                        <div class="close_btns " id ="close_btn">Close</div>
 	                        <form action=" " method="post ">
 	                        	Login
 	                            <div>
 		                            <div class="registration_details ">
-		                            	<div id ="username">admin</div>
-		                            	<div id ="password">admin</div>
+		                            <div id ="username"> Enter Username</div>
+		                            <input id = "e" placeholder="Enter a player name"></input>
+		                            	
+		                            <div id ="password"> Enter Password</div>
+		                           	<input id = "f" placeholder="Enter a player name"></input>
+		                            	
 <!-- 		                                <input name="username " type="text " id="username " class="textbox " size="30 " placeholder="First_Name" />
 		                                <input name="password " type="password " id="password " class="textbox " size="30 " placeholder="Password * " /> -->
 		                                <input name="submit " type="submit " id ="submiti" value="Login " class="btn register_btn "/>
@@ -102,6 +106,16 @@
 			</div>
 			<div id="overallacc"></div>
 			</div>
+
+				<div class="col-sm-12 thousand_players">
+			 <div class="view_players" id = "view_players_rating">Your Predicted Rating is : </div>
+
+			 </div>
+
+			 <div class="col-sm-12 thousand_players">
+			 <div class="view_players" id = "view_players">View thousand  players</div>
+
+			 </div>
 		</div>
 		<div class ="col-sm-6 col-lg-6 col-md-12">
 			<div class="recommended_players" id ="recomm">
@@ -111,16 +125,29 @@
 		</div>
 	</div>
 							 		<div id ="getplayer">
+							 			<div class="view_ab">View Players Ability</div>
 						 				<input id = "d" placeholder="Enter a player name"></input>
 
-						 					 <div id="player_naem_ratinf">Rner playe name/div>
+						 					 <div id="player_naem_ratinf">Enter  a player  name</div>
+
+						 					  <div id="abil"></div>
 						 		 </div>
-	<div class="col-sm-12 thousand_players">
-			 <div class="view_players" id = "view_players">View thousand  players</div>
 
-			 </div>
 
-			 <div id="admin_section" style="display: none;"> The admin pannel
+
+						 		
+
+						 		 <div id ="teamcountry">
+						 		 	<div class="view_count_section">View All Players Of The Country</div>
+						 				<input id = "c" placeholder="Country"></input>
+
+						 					 <div id="country_find">Country's Players</div>
+						 					 <div id="get_countryplayer"></div>
+						 		 </div>
+
+
+			 <div id="admin_section" style="display: none;"> 
+			 <div>The admin pannel</div>
 			 		<div class="rem_player">Remove player</div>
 			 			   <!-- <input type="number" name="a" id="a"><br> -->
 
@@ -129,14 +156,11 @@
 
 
 
-						 		<div class="Addplayer">Add a new layer <input id = "b" placeholder="Add a player"></input>
+						 		<div class="Addplayer">
+						 		<div class="add_player_1">Add a new layer </div><input id = "b" placeholder="Add a player"></input>
 						 			  	 <div id="adp_layer">Add player</div>
 						 		</div>
-						 		<div id ="teamcountry">
-						 				<input id = "c" placeholder="Country"></input>
 
-						 					 <div id="country_find">Add player</div>
-						 		 </div>
 			</div>
 
 <!-- 			 		<div class="add_player">Remove player</div>
