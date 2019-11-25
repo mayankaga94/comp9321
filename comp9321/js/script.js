@@ -296,8 +296,10 @@ document.getElementById('fetch_players').onclick = closestfunction;
 				     fetch(`${apiUrl}/overall`,options_new)
 				       .then(res => res.json())
 				       .then(json =>myfunc(json))
+				       document.getElementById("ratingmew").innerHTML = "";
   							  function myfunc(jsons){
-  							  	var div_1 = document.getElementById('view_players_rating');
+
+  							  	var div_1 = document.getElementById('ratingmew');
   							  	div_1.innerHTML += jsons.Overall_Rating;
   							  	// implementation of getting closest player						
 			  						fetch(`${apiUrl}/closest`,options_new)
