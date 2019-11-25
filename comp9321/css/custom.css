@@ -132,7 +132,7 @@ text-align: center;
 font-size: 28px;
 padding: 40px;
 }
-#a, #b{
+#a, #b,#play_im{
 	padding: 10px;
 margin: 38px;
 }
@@ -171,7 +171,7 @@ margin-top: 26px;
 	color:white;
 	background: #ccc;
 }
-#player_naem_ratinf, #country_find{
+#player_naem_ratinf, #country_find,#player_naem{
 	display: inline-block;
 border: 1px solid #ccc;
 padding: 22px;
