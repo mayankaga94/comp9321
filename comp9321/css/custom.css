@@ -1,0 +1,235 @@
+#result,#composure,#vision,#short_passing,#reaction,#ball_control{
+	max-width: 300px;
+	float: left;
+	margin:10px;
+}
+.values_initial{
+padding: 10px;
+float: left;
+}
+.home-screen{
+	float: left;
+}
+.wrapper_header{
+display: block;
+float: left;
+width: 100%;
+font-size: 24px;
+padding: 30px;
+color: #1b312e;
+background: #5d5e9e;
+border: 1px solid #ccc;
+color: white;
+}
+.admim_login button{
+/*	background: blue;
+	padding: 15px;
+	color: white;*/
+}
+#close_btn{
+	text-align: right;
+	font-size: 12px;
+}
+.signup_form_1{
+    width: 360px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    border-radius: 3px;
+    background: rgba(86, 86, 86, 0.74);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    color: #fff;
+}
+   .recommended_players{
+   	padding: 60px;
+text-align: center;
+font-size: 23px;
+color: rgb(45, 111, 241);
+font-weight: 600;
+letter-spacing: 1px;
+    }
+.admim_login{
+	float: right;
+	font-size: 14px;
+}
+.slide_wrap_inner{
+	border-right:1px solid #ccc;
+	/*border-radius: 10px;*/
+}
+#reaction_html, #vision_html,#composure_html,#shortpassing_html,#ballcontrol_html{
+	color: white;
+    font-size: 24px;
+    font-weight: 600;
+    padding-left: 10%;
+    float: left;
+    min-height: 35px;
+}
+.slide_wrap{
+	margin-top: 10px;
+	padding:50px !important;
+}
+.btn.btn-outline-light{
+	margin-left: 85px;
+}
+h2{
+	font-size: 18px !important;
+	margin: 0 !important;
+}
+.slider_content{
+	float: left;
+	width: 100%;
+	padding-left: 30px;
+}
+.fields{
+	float: left;
+	width: 100%;
+	padding-bottom: 10px;
+}
+.textbox {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid white;
+    background: transparent;
+    padding: 8px 0;
+    padding-top: 30px;
+    color: #fff;
+    min-height: 60px;
+}
+#abilities{
+	display: inline-block;
+	margin: 10px;
+	padding-left: 100px;
+	font-size: 16px;
+}
+input{
+	color:black;
+	font-size: 14px !important;
+	min-width: 300px;
+
+}
+#get_countryplayer >div{
+	font-size: 16px;
+	padding: 5px;
+	display: inline-block;
+	margin: 10px;
+
+}
+#similar{
+	display: inline-block;
+
+}
+#admin_section{
+	display: block;
+background: #ccc;
+text-align: center;
+font-size: 28px;
+padding: 40px;
+}
+#a, #b{
+	padding: 10px;
+margin: 38px;
+}
+.Addplayer{
+	margin-top: 100px;
+	border:1px solid #ccc;
+}
+#rm_player, #adp_layer{
+	background: rgb(83, 98, 154);
+margin: 0 auto;
+max-width: 220px;
+border: 1px solid green;
+padding: 14px;
+font-size: 18px;
+color: white;
+margin-top: 26px;
+}
+.rem_player,.add_player_1{
+	font-weight: 600;
+	display: inline-block;
+}
+#username, #password{
+	margin: 15px;
+	font-size: 15px;
+}
+.view_count_section{
+	padding: 20px;
+	font-size: 18px;
+}
+.rem_player{
+	display: inline-block;
+}
+#country_find{
+	display: inline-block;
+	padding: 5px;
+	color:white;
+	background: #ccc;
+}
+#player_naem_ratinf, #country_find{
+	display: inline-block;
+border: 1px solid #ccc;
+padding: 22px;
+background: #ccc;
+font-size: 16px;
+color: rgb(139, 104, 255);
+cursor: pointer;
+}
+#getplayer{
+	padding: 20px;
+	border:1px solid #ccc;
+}
+#d, #c{
+	padding: 20px;
+	margin: 20px;
+}
+#teamcountry{
+	padding: 20px;
+}
+.view_ab{
+	font-size: 18px;
+	padding: 20px;
+}
+.list_players{
+	margin: 20px;
+}
+#view_players_rating{
+	font-size: 18px;
+	padding:14px;
+}
+.display_none{
+	display: none;
+}
+.slide_wrap{
+	color:white;
+}
+.view_players{
+	color: black;
+}
+.wrapper{
+	 background-image: url('../image.jpg');
+	 background-size: cover;
+}
+.registration_wrapper{
+	position: absolute;
+	top: 10px;
+	z-index: 999;
+	right: 10px;
+	top: 65px;
+}
+.btn {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    width: 240px;
+    height: 40px;
+    background: #347fc0;
+    border: none;
+    color: #fff;
+}
+.close_btn {
+    position: absolute;
+    right: 15px;
+    font-size: 24px;
+    top: 5px;
+    cursor: pointer;
+}
