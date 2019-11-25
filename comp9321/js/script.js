@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	document.getElementById("rm_player").addEventListener("click", remove);
  		  		 	function remove(e){
- 		  		 		// alert("hi")
+ 
  		  		 		 zz = document.getElementById("a").value;
  		 		fetch(`${apiUrl}/player/${zz}`, {
 					  method: 'DELETE',
@@ -129,7 +129,6 @@ document.getElementById("country_find").addEventListener("click", country_team);
 
 	function country_team(e){
 		 country_name = document.getElementById("c").value;
-		 alert(`${country_name}`)
 			var player_team_ = [];
 		          const options_new ={
 				        method :'GET',
@@ -238,7 +237,6 @@ document.getElementById("player_naem").addEventListener("click", country);
 
 		 	   document.getElementById("abil5").addEventListener("click", xyz);
 				function xyz(e){
-					alert("hi")
 							 player_ratin = document.getElementById("play_im").value;
 							 // console.log(player_ratin)
 							 
