@@ -109,6 +109,10 @@ input{
 	min-width: 300px;
 
 }
+#id5{
+	width: 100px;
+height: 100px;
+}
 #get_countryplayer >div{
 	font-size: 16px;
 	padding: 5px;
@@ -118,6 +122,7 @@ input{
 }
 #similar{
 	display: inline-block;
+	margin-bottom: 50px;
 
 }
 #admin_section{

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){ 
-	var apiUrl = `http://localhost:3000`;
+	var apiUrl = `http://0.0.0.0:3000`;
 		document.getElementById("admin_p").addEventListener("click", myFunction);
 		function myFunction(e){
 				  document.getElementById('signup_form').style.display = "block";
@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function(){
 }
 
 
+
+ // /for posting a playrer
 				
 }
 
@@ -61,11 +63,47 @@ document.getElementById('signup_form').style.display = "none";
 document.getElementById("adp_layer").addEventListener("click", add);
 
 	function add(e){
+			var id= document.getElementById("b").value;
+		    var Name= document.getElementById("c").value;
+    		var Nationality= document.getElementById("c_1").value;
+    		var Overall= document.getElementById("c_2").value;
+    		var Wage= document.getElementById("c_3").value;
+    		var Reaction= document.getElementById("c_4").value;
+    		var Age= document.getElementById("c_5").value;
+    		var Composure= document.getElementById("c_6").value;
+    		var Vision= document.getElementById("c_7").value;
+    		var Short_pannel= document.getElementById("c_8").value;
+    		var Ball_pannel= document.getElementById("c_9").value;
+    		var Photo= document.getElementById("c_10").value;
+    		var Flag= document.getElementById("c_11").value;
+
+			  	 const user = {
+			  	 	Id: `${Id}`,
+			        Name: `${Name}`,
+			        Nationality: `${Nationality}`,
+			        Overall:`${Overall}`,
+			        Wage:`${Wage}`,
+			        Reaction:`${Reaction}`,
+			        Age:`${Age}`,
+			        Composure:`${Composure}`,
+			        Vision:`${Vision}`,
+			        Short_pannel:`${Short_pannel}`,
+			        Ball_Control:`${Ball_pannel}`,
+			        Photo:`${Photo}`,
+			        Flag:`${Flag}`,
+			    }
+			 const options = {
+			        method: 'POST',
+			        headers: {
+			            "Content-Type": "application/json"   
+			        },
+			        body: JSON.stringify(user)
+			    }
+
+
+
 			 xx = "Neel";
-			 // fetch(`${apiUrl}/player/${xx}`, putMethod)
-				// 	.then(response => response.json())
-				// 	.then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
-				// 	.catch(err => console.log(err)) // Do something with the error
+
 					const putMethod = {
 					method: 'PUT', // Method itself
 					headers: {
@@ -80,7 +118,8 @@ document.getElementById("adp_layer").addEventListener("click", add);
 					.catch(err => console.log(err)) 
 				}
     		}
-		}
+		
+	}
 // ----------------------------------admin ends -----------------------------------------------------------
 
 
@@ -123,9 +162,7 @@ document.getElementById("country_find").addEventListener("click", country_team);
 
 // ----------------------------get tea contry --------------------------
 
-
-
-document.getElementById("player_naem_ratinf").addEventListener("click", country);
+document.getElementById("player_naem").addEventListener("click", country);
 	function country(e){
 		var player_plots=[];
 		 player_plot = document.getElementById("d").value;
@@ -198,30 +235,41 @@ document.getElementById("player_naem_ratinf").addEventListener("click", country)
 	}, false); 
 
 // ----------------------------forfetching thousd players----------------//
-document.getElementById("view_players").addEventListener("click", viewplayersfunction);
-	function viewplayersfunction(e){
-			var player = [];
-		          const options_new ={
-				        method :'GET',
-				        body: JSON.stringify()
-				    }
-				     fetch(`${apiUrl}/player`,options_new)
-					  .then(response => {
-						       if (!response.ok) {
-						           throw new Error("HTTP error " + response.status);
-						       }
-						       return response.json();
-						   })
-						 .then(json => {
-						       this.users = json;
-						       player.push(this.users)
-						       for (i in player[0]){					       		
-						       		// view_players_wrapper = document.getElementById("view_players")
-						       		console.log(player[0][i])
-						       }
-						   })
-            		 e.preventDefault();    
-		      }
+
+		 	   document.getElementById("abil5").addEventListener("click", xyz);
+				function xyz(e){
+					alert("hi")
+							 player_ratin = document.getElementById("play_im").value;
+							 // console.log(player_ratin)
+							 
+					          const options_new ={
+							        method :'GET',
+							        body: JSON.stringify()
+							    }
+							    // console.log(`{$player_ratin}`);
+							     fetch(`${apiUrl}/rating/{$player_ratin}`,options_new)
+								  .then(response => {
+									       if (!response.ok) {
+									           throw new Error("HTTP error " + response.status);
+									       }
+									       return response.json();
+									   })
+									 .then(json => {
+									       this.users = json;
+									       console.log(this.users = json)
+									       console.log( this.users)
+									       player.push(this.users)
+									       for (i in player[0]){					       		
+									       		// view_players_wrapper = document.getElementById("view_players")
+									       		console.log(player[0][i])
+									       }
+									   })
+			            		 e.preventDefault();    
+					      }
+
+
+
+		      // 
 // -------------for posting similar player request =------------------/
 
 document.getElementById('fetch_players').onclick = closestfunction;
@@ -259,15 +307,29 @@ document.getElementById('fetch_players').onclick = closestfunction;
 
 			  							  		// console.log(jsonz.Closest_Player);
 			  							  		closest.push(jsonz.Closest_Player);
-			  							  		console.log(closest[0]);
+			  							  		// console.log(closest[0]);
+			  							  		document.getElementById("recomm").innerHTML = "";
 			  							  	for (j in closest[0] )
 			  							  	{
+
+			  							  		 var iDiv5 = document.createElement('div');
 			  							  		var recomm_res = document.getElementById('recomm');
 					  							 var iDiv3 = document.createElement('div');
+					  							 var iDiv4 = [];
 												iDiv3.id = 'similar';
-												iDiv3.append(closest[0][j])
+												iDiv3.append(closest[0][j][0])
+												iDiv4.push(closest[0][j][1])
+												// console.log(iDiv4)
+															  		var image = document.createElement("img");
+																	image.id = "id5";
+																	image.className = "class";
+																	image.src = iDiv4[0];    
+																	        // image.src = "IMAGE URL/PATH"
 
-			  							  			recomm_res.append(iDiv3);
+																	iDiv5.appendChild(image);
+			  							  							
+			  							  							recomm_res.append(iDiv5);
+			  							  							recomm_res.append(iDiv3);
 			  							  	}
 			  							  	
 
