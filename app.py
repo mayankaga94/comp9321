@@ -43,11 +43,12 @@ class AuthenticationToken:
         return info['username']
 
 def validate_new_data(data):
-    for i in data:
-        if isinstance(i, int):
-            if i>100:
-                return False
-    if 0 or None or "string" in data:
+
+    if 0  in data:
+        return False
+    elif None in data:
+        return False
+    elif 'string' in data:
         return False
     else:
         return True
@@ -73,7 +74,7 @@ api = Api(app, authorizations={
                       "application also returns Graphs about the overall  player and details about the players")  #
 # Document Description
 prediction = api.model('Prediction', {
-    'Reactions': fields.Integer,
+    'Reactions': fields.Integer(),
     'Composure': fields.Integer,
     'Vision': fields.Integer,
     'ShortPassing': fields.Integer,
@@ -197,7 +198,7 @@ class Player(Resource):
                                      index=['ID', 'Name', 'Nationality', 'Overall', 'Wage', 'Reactions', 'Composure',
                                             'Vision', 'ShortPassing', 'BallControl', 'Photo', 'Flag']), ignore_index=True)
             df.to_csv('data_reduced.csv')
-            return 200
+            return {'Message': 'Posted'}, 200
         else:
             return {'Message': 'Value Error'}, 422
 
@@ -229,7 +230,7 @@ class Rating(Resource):
             plt.axvline(player_rating, 0, 1, color='red')
             fig = sns_plot.get_figure()
             fig.savefig("output.png")
-            return 200
+            return  {'Message': 'output.png'}, 200
         else:
             return {"message": "Player not found"}, 401
 
@@ -344,7 +345,7 @@ class Players(Resource):
                 else :
                     df.loc[df.Name == name, i] = values[i]
             df.to_csv('data_reduced.csv')
-            return 200
+            return {'Message': 'Updated'}, 200
 
     @staticmethod
     def index():
@@ -364,7 +365,7 @@ class Players(Resource):
         else:
             df = df[df.Name != name]
             df.to_csv('data_reduced.csv')
-            return 200
+            return {'Message': 'Deleted'}, 200
 
 
 @api.expect(prediction)
@@ -385,6 +386,8 @@ class Overall(Resource):
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
         val = validate_new_data(new_player)
+        if len(new_player) != 5:
+            return {'Message': 'Value Error'}, 422
         if val :
             reg = pickle.load(open(filename, 'rb'))
             overall_rating = self.calc_overall(new_player, reg)
@@ -423,8 +426,10 @@ class Closest(Resource):
         new_player = [values['Reactions'], values['Composure'], values['Vision'], values['ShortPassing'],
                       values['BallControl']]
         val = validate_new_data(new_player)
+        print(val)
+        if len(new_player) != 5:
+            return {'Message': 'Value Error'}, 422
         if val :
-
             closest_players = self.closest(new_player)
 
             return {"Closest_Player": closest_players}, 200
@@ -433,7 +438,7 @@ class Closest(Resource):
 
     @staticmethod
     def closest(new_player):
-        df = pd.read_csv('data.csv', index_col=0)
+        df = pd.read_csv('data_reduced.csv', index_col=0)
         df = shuffle(df, random_state=10)
 
         df = df[['Reactions', 'Composure', 'Vision', 'ShortPassing', 'BallControl', 'Name']]
@@ -446,7 +451,13 @@ class Closest(Resource):
         preds = neigh.kneighbors([new_player], 3, return_distance=False)
 
         closest_players = [y.iloc[pred] for pred in preds[0]]
-        return closest_players
+        df = pd.read_csv('data_reduced.csv', index_col=0)
+        photos = []
+        for i in closest_players:
+            df1 = df[df['Name'] == i]
+            photos.append(df1['Photo'].to_string(index=False))
+        dic = {'player1' : [closest_players[0],photos[0]] , 'player2' : [closest_players[1],photos[1]] , 'player3': [closest_players[2],photos[2]]}
+        return dic
 
     @staticmethod
     def index():
@@ -464,7 +475,7 @@ class Test(Resource):
     @api.response(500, 'Internal Server Error')
     @api.doc(description="Keep track of the number of times each Api is called")
     def get(self):
-        return jsonify(count_overall=counter.value, count_closest=counter_nearest_player.value,team = counter_team.value,rating = counter_rating.value, tags = counter_tags.value,player = counter_player.value , total =counter.value + counter_nearest_player.value + counter_team.value + counter_rating.value + counter_player.value + counter_tags.value)
+        return jsonify(count_overall=counter.value, count_closest=counter_nearest_player.value,team = counter_team.value,rating = counter_rating.value, tags = counter_tags.value,player = counter_player.value , total =counter.value + counter_nearest_player.value + counter_team.value + counter_rating.value + counter_player.value + counter_tags.value) , 200
 
 
 if __name__ == '__main__':

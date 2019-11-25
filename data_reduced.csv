@@ -1,5 +1,5 @@
 ,ID,Name,Age,Nationality,Overall,Wage,Reactions,Composure,Vision,ShortPassing,BallControl,Photo,Flag
-0,158023,L. Messi,31.0,Argentina,94,565000,95.0,96.0,94.0,90.0,96.0,https://cdn.sofifa.org/players/4/19/158023.png,https://cdn.sofifa.org/flags/52.png
+0,158023,L. Messi,31.0,Argentina,94,565000,95.0,96.0,95.0,90.0,96.0,https://cdn.sofifa.org/players/4/19/158023.png,https://cdn.sofifa.org/flags/52.png
 1,20801,Cristiano Ronaldo,33.0,Portugal,94,405000,96.0,95.0,82.0,81.0,94.0,https://cdn.sofifa.org/players/4/19/20801.png,https://cdn.sofifa.org/flags/38.png
 2,190871,Neymar Jr,26.0,Brazil,92,290000,94.0,94.0,87.0,84.0,95.0,https://cdn.sofifa.org/players/4/19/190871.png,https://cdn.sofifa.org/flags/54.png
 3,193080,De Gea,27.0,Spain,91,260000,90.0,68.0,68.0,50.0,42.0,https://cdn.sofifa.org/players/4/19/193080.png,https://cdn.sofifa.org/flags/45.png
@@ -174,7 +174,6 @@
 172,208618,Lucas Vázquez,27.0,Spain,83,205000,85.0,75.0,83.0,83.0,83.0,https://cdn.sofifa.org/players/4/19/208618.png,https://cdn.sofifa.org/flags/45.png
 173,208418,Y. Carrasco,24.0,Belgium,83,20000,83.0,75.0,71.0,77.0,87.0,https://cdn.sofifa.org/players/4/19/208418.png,https://cdn.sofifa.org/flags/7.png
 174,208093,Gerard Moreno,26.0,Spain,83,53000,82.0,72.0,58.0,78.0,81.0,https://cdn.sofifa.org/players/4/19/208093.png,https://cdn.sofifa.org/flags/45.png
-175,207863,Felipe,29.0,Brazil,83,22000,77.0,75.0,50.0,74.0,62.0,https://cdn.sofifa.org/players/4/19/207863.png,https://cdn.sofifa.org/flags/54.png
 176,207410,M. Kovačić,24.0,Croatia,83,165000,70.0,72.0,88.0,87.0,89.0,https://cdn.sofifa.org/players/4/19/207410.png,https://cdn.sofifa.org/flags/10.png
 177,206585,Kepa,23.0,Spain,83,84000,79.0,63.0,55.0,32.0,16.0,https://cdn.sofifa.org/players/4/19/206585.png,https://cdn.sofifa.org/flags/45.png
 178,206545,Manu Trigueros,26.0,Spain,83,49000,82.0,73.0,84.0,86.0,83.0,https://cdn.sofifa.org/players/4/19/206545.png,https://cdn.sofifa.org/flags/45.png
@@ -1570,7 +1569,6 @@
 1568,220414,Diego Rico,25.0,Spain,76,49000,71.0,64.0,63.0,76.0,68.0,https://cdn.sofifa.org/players/4/19/220414.png,https://cdn.sofifa.org/flags/45.png
 1569,176894,Mossoró,34.0,Brazil,76,25000,72.0,76.0,77.0,77.0,78.0,https://cdn.sofifa.org/players/4/19/176894.png,https://cdn.sofifa.org/flags/54.png
 1570,221695,G. Donsah,22.0,Ghana,76,27000,74.0,74.0,74.0,78.0,78.0,https://cdn.sofifa.org/players/4/19/221695.png,https://cdn.sofifa.org/flags/117.png
-1571,768,Felipe,33.0,Brazil,75,13000,72.0,68.0,46.0,62.0,60.0,https://cdn.sofifa.org/players/4/19/768.png,https://cdn.sofifa.org/flags/54.png
 1572,216320,S. Fofana,23.0,Ivory Coast,75,22000,74.0,70.0,70.0,76.0,76.0,https://cdn.sofifa.org/players/4/19/216320.png,https://cdn.sofifa.org/flags/108.png
 1573,239872,Pablo Santos,26.0,Brazil,75,13000,74.0,59.0,33.0,58.0,56.0,https://cdn.sofifa.org/players/4/19/239872.png,https://cdn.sofifa.org/flags/54.png
 1574,198657,J. Svensson,25.0,Norway,75,13000,72.0,71.0,65.0,73.0,69.0,https://cdn.sofifa.org/players/4/19/198657.png,https://cdn.sofifa.org/flags/36.png
@@ -3534,7 +3532,6 @@
 3532,215144,E. Insúa,27.0,Argentina,72,1000,70.0,65.0,60.0,68.0,67.0,https://cdn.sofifa.org/players/4/19/215144.png,https://cdn.sofifa.org/flags/52.png
 3533,219496,Simy,26.0,Nigeria,72,4000,74.0,70.0,46.0,54.0,57.0,https://cdn.sofifa.org/players/4/19/219496.png,https://cdn.sofifa.org/flags/133.png
 3534,189288,G. Angella,29.0,Italy,72,18000,64.0,66.0,48.0,58.0,56.0,https://cdn.sofifa.org/players/4/19/189288.png,https://cdn.sofifa.org/flags/27.png
-3535,207465,Felipe,27.0,Brazil,72,7000,68.0,68.0,70.0,75.0,70.0,https://cdn.sofifa.org/players/4/19/207465.png,https://cdn.sofifa.org/flags/54.png
 3536,223593,J. Correa,25.0,Argentina,72,11000,58.0,60.0,54.0,62.0,75.0,https://cdn.sofifa.org/players/4/19/223593.png,https://cdn.sofifa.org/flags/52.png
 3537,48745,F. Coloccini,36.0,Argentina,72,10000,67.0,72.0,48.0,64.0,65.0,https://cdn.sofifa.org/players/4/19/48745.png,https://cdn.sofifa.org/flags/52.png
 3538,190569,S. Frei,32.0,United States,72,5000,71.0,51.0,50.0,32.0,26.0,https://cdn.sofifa.org/players/4/19/190569.png,https://cdn.sofifa.org/flags/95.png
@@ -4210,7 +4207,6 @@
 4208,179528,Xavi Torres,31.0,Spain,71,5000,71.0,74.0,72.0,72.0,69.0,https://cdn.sofifa.org/players/4/19/179528.png,https://cdn.sofifa.org/flags/45.png
 4209,209738,A. Cadavid,32.0,Colombia,71,3000,65.0,60.0,30.0,61.0,46.0,https://cdn.sofifa.org/players/4/19/209738.png,https://cdn.sofifa.org/flags/56.png
 4210,162890,J. Spector,32.0,United States,71,5000,69.0,68.0,53.0,68.0,68.0,https://cdn.sofifa.org/players/4/19/162890.png,https://cdn.sofifa.org/flags/95.png
-4211,188234,Felipe,31.0,Brazil,71,18000,66.0,66.0,38.0,62.0,63.0,https://cdn.sofifa.org/players/4/19/188234.png,https://cdn.sofifa.org/flags/54.png
 4212,208459,M. Dijks,25.0,Netherlands,71,17000,70.0,70.0,52.0,66.0,67.0,https://cdn.sofifa.org/players/4/19/208459.png,https://cdn.sofifa.org/flags/34.png
 4213,209483,M. Hassen,23.0,Tunisia,71,12000,62.0,59.0,31.0,24.0,24.0,https://cdn.sofifa.org/players/4/19/209483.png,https://cdn.sofifa.org/flags/145.png
 4214,198220,M. Bourabia,26.0,Morocco,71,29000,70.0,68.0,63.0,77.0,72.0,https://cdn.sofifa.org/players/4/19/198220.png,https://cdn.sofifa.org/flags/129.png
@@ -5600,7 +5596,6 @@
 5598,226035,J. Morris,23.0,United States,70,5000,64.0,60.0,55.0,64.0,63.0,https://cdn.sofifa.org/players/4/19/226035.png,https://cdn.sofifa.org/flags/95.png
 5599,183283,J. Taravel,31.0,France,70,8000,61.0,58.0,54.0,64.0,61.0,https://cdn.sofifa.org/players/4/19/183283.png,https://cdn.sofifa.org/flags/18.png
 5600,224756,A. Lusamba,21.0,France,70,12000,60.0,63.0,68.0,67.0,76.0,https://cdn.sofifa.org/players/4/19/224756.png,https://cdn.sofifa.org/flags/18.png
-5601,184820,Felipe,30.0,Brazil,70,6000,65.0,71.0,54.0,59.0,56.0,https://cdn.sofifa.org/players/4/19/184820.png,https://cdn.sofifa.org/flags/54.png
 5602,190196,Z. Touré,28.0,Senegal,70,16000,65.0,60.0,44.0,53.0,58.0,https://cdn.sofifa.org/players/4/19/190196.png,https://cdn.sofifa.org/flags/136.png
 5603,193780,I. Hajrović,26.0,Bosnia Herzegovina,70,1000,64.0,69.0,68.0,72.0,73.0,https://cdn.sofifa.org/players/4/19/193780.png,https://cdn.sofifa.org/flags/8.png
 5604,199413,T. Kempe,29.0,Germany,70,12000,70.0,73.0,77.0,71.0,75.0,https://cdn.sofifa.org/players/4/19/199413.png,https://cdn.sofifa.org/flags/21.png
@@ -11989,7 +11984,6 @@
 11987,183789,M. Howard,31.0,England,64,2000,62.0,44.0,35.0,28.0,33.0,https://cdn.sofifa.org/players/4/19/183789.png,https://cdn.sofifa.org/flags/14.png
 11988,205038,F. Helstrup,25.0,Denmark,64,1000,63.0,59.0,25.0,56.0,53.0,https://cdn.sofifa.org/players/4/19/205038.png,https://cdn.sofifa.org/flags/13.png
 11989,210158,A. Kellett,24.0,England,64,4000,55.0,60.0,60.0,62.0,64.0,https://cdn.sofifa.org/players/4/19/210158.png,https://cdn.sofifa.org/flags/14.png
-11990,204783,Felipe,25.0,Spain,64,2000,59.0,57.0,43.0,68.0,68.0,https://cdn.sofifa.org/players/4/19/204783.png,https://cdn.sofifa.org/flags/45.png
 11991,167919,M. Done,29.0,Wales,64,1000,62.0,66.0,62.0,62.0,63.0,https://cdn.sofifa.org/players/4/19/167919.png,https://cdn.sofifa.org/flags/50.png
 11992,233711,T. Oude Kotte,22.0,Netherlands,64,1000,59.0,63.0,56.0,64.0,63.0,https://cdn.sofifa.org/players/4/19/233711.png,https://cdn.sofifa.org/flags/34.png
 11993,234991,M. Opondo,20.0,Uganda,64,2000,61.0,52.0,59.0,65.0,67.0,https://cdn.sofifa.org/players/4/19/234991.png,https://cdn.sofifa.org/flags/146.png
