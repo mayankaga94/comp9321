@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){ 
-	var apiUrl = `http://0.0.0.0:3000`;
+	var apiUrl = `http://localhost:3000`;
 		document.getElementById("admin_p").addEventListener("click", myFunction);
 		function myFunction(e){
 				  document.getElementById('signup_form').style.display = "block";

@@ -179,7 +179,8 @@ class Player(Resource):
 
         return df.head(1000).to_dict('index'), 200
 
-
+    @requires_auth
+    @api.response(401, 'Unauthorized')
     @api.expect(player)
     @api.doc(description="Add a new player")
     def post(self):
@@ -310,6 +311,7 @@ class Teams(Resource):
 class Players(Resource):
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
+    @api.response(401, 'Unauthorized')
     @api.doc(description="Returns 1000 players")
     @api.response(200, 'OK')
     @api.response(409, 'Conflict')
@@ -326,6 +328,8 @@ class Players(Resource):
         else:
             return df.to_dict('records'), 200
 
+    @requires_auth
+    @api.response(401, 'Unauthorized')
     @api.expect(player)
     @api.doc(description="Update a player on the player name")
     def put(self, name):
@@ -353,6 +357,7 @@ class Players(Resource):
             counter_player.value += 1
         return jsonify(count=counter_player.value)
 
+    @requires_auth
     @api.doc(description="Delete a player on the player name")
     def delete(self, name):
         df = pd.read_csv('data_reduced.csv', index_col=0)
@@ -455,9 +460,20 @@ class Closest(Resource):
         photos = []
         for i in closest_players:
             df1 = df[df['Name'] == i]
-            photos.append(df1['Photo'].to_string(index=False))
-        dic = {'player1' : [closest_players[0],photos[0]] , 'player2' : [closest_players[1],photos[1]] , 'player3': [closest_players[2],photos[2]]}
-        return dic
+
+            if df1.shape[0] == 1:
+                photos.append(df1['Photo'].to_string(index=False))
+            else:
+
+                photos.append(df1['Photo'].iloc[0])
+        dic = {'player1': [closest_players[0], photos[0]], 'player2': [closest_players[1], photos[1]],
+               'player3': [closest_players[2], photos[2]]}
+        return dic,200
+        # for i in closest_players:
+        #     df1 = df[df['Name'] == i]
+        #     photos.append(df1['Photo'].to_string(index=False))
+        # dic = {'player1' : [closest_players[0],photos[0]] , 'player2' : [closest_players[1],photos[1]] , 'player3': [closest_players[2],photos[2]]}
+        # return dic
 
     @staticmethod
     def index():
@@ -469,6 +485,7 @@ class Closest(Resource):
 @api.route('/counter')
 class Test(Resource):
     @requires_auth
+    @api.response(401, 'Unauthorized')
     @api.response(404, 'Not Found')
     @api.response(201, 'Created')
     @api.response(200, 'OK')
