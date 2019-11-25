@@ -1,0 +1,466 @@
+{
+    "swagger": "2.0",
+    "basePath": "/",
+    "paths": {
+        "/closest": {
+            "parameters": [
+                {
+                    "name": "payload",
+                    "required": true,
+                    "in": "body",
+                    "schema": {
+                        "$ref": "#/definitions/Prediction"
+                    }
+                }
+            ],
+            "post": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns top three closest players",
+                "operationId": "post_closest",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/counter": {
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "description": "Keep track of the number of times each Api is called",
+                "operationId": "get_test",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/overall": {
+            "parameters": [
+                {
+                    "name": "payload",
+                    "required": true,
+                    "in": "body",
+                    "schema": {
+                        "$ref": "#/definitions/Prediction"
+                    }
+                }
+            ],
+            "post": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Predicts overall rating based on a given variables",
+                "operationId": "post_overall",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/player": {
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns 1000 players",
+                "operationId": "get_player",
+                "tags": [
+                    "FIFA Database"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "description": "Add a new player",
+                "operationId": "post_player",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Player"
+                        }
+                    }
+                ],
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/player/{name}": {
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns 1000 players",
+                "operationId": "get_players",
+                "tags": [
+                    "FIFA Database"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "description": "Delete a player on the player name",
+                "operationId": "delete_players",
+                "tags": [
+                    "FIFA Database"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "description": "Update a player on the player name",
+                "operationId": "put_players",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Player"
+                        }
+                    }
+                ],
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/rating/{name}": {
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns plot of overall rating of a given player",
+                "operationId": "get_rating",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/tags/{name}": {
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns tags of a given player",
+                "operationId": "get_tags",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/team/{country}": {
+            "parameters": [
+                {
+                    "name": "country",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "description": "Returns team of a given country name",
+                "operationId": "get_teams",
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        },
+        "/token": {
+            "post": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "200": {
+                        "description": "Successful"
+                    }
+                },
+                "description": "Generates a authentication token",
+                "operationId": "post_token",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/credential"
+                        }
+                    }
+                ],
+                "tags": [
+                    "FIFA Database"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Services to provide insights and predictions on FIFA Dataset",
+        "version": "1.0",
+        "description": "An application which uses the FIFA dataset to run machine learning algorithms to give the overall rating of a new player and three other closest players to the new player. The application also returns Graphs about the overall  player and details about the players"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "API-KEY": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "AUTH-TOKEN"
+        }
+    },
+    "security": [
+        {
+            "API-KEY": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "FIFA Database",
+            "description": "Default namespace"
+        }
+    ],
+    "definitions": {
+        "credential": {
+            "properties": {
+                "Username": {
+                    "type": "string"
+                },
+                "Password": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Player": {
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Nationality": {
+                    "type": "string"
+                },
+                "Overall": {
+                    "type": "number"
+                },
+                "Wage": {
+                    "type": "integer"
+                },
+                "Reactions": {
+                    "type": "integer"
+                },
+                "Age": {
+                    "type": "integer"
+                },
+                "Composure": {
+                    "type": "integer"
+                },
+                "Vision": {
+                    "type": "integer"
+                },
+                "ShortPassing": {
+                    "type": "integer"
+                },
+                "BallControl": {
+                    "type": "integer"
+                },
+                "Photo": {
+                    "type": "string"
+                },
+                "Flag": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Prediction": {
+            "properties": {
+                "Reactions": {
+                    "type": "integer"
+                },
+                "Composure": {
+                    "type": "integer"
+                },
+                "Vision": {
+                    "type": "integer"
+                },
+                "ShortPassing": {
+                    "type": "integer"
+                },
+                "BallControl": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        }
+    }
+}
