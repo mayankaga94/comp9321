@@ -230,7 +230,7 @@ class Rating(Resource):
             sns_plot = sns.kdeplot(x, shade=True)
             plt.axvline(player_rating, 0, 1, color='red')
             fig = sns_plot.get_figure()
-            fig.savefig("output.png")
+            fig.savefig("comp9321\output.png")
             return  {'Message': 'output.png'}, 200
         else:
             return {"message": "Player not found"}, 401
